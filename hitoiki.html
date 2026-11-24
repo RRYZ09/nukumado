@@ -58,7 +58,7 @@ function draw() {
   c.append(el("div", "ic", p.ic), el("div", "t", p.t), el("div", "s", p.s));
   if (p.from) c.append(el("div", "from", p.from));
   let go;
-  if (p.item && p.item.url) {
+  if (p.item && /^https?:\/\//.test(p.item.url || "")) { /* http(s) だけ */
     go = el("a", "hk-go", HK.goLabel(p.item.url, true));
     go.href = p.item.url;
     go.target = "_blank";

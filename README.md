@@ -1,6 +1,8 @@
 # ぬくまど — じぶんをいたわるホーム画面
 
-[![版](https://img.shields.io/github/v/release/RRYZ09/nukumado?label=%E7%89%88&color=d97a93)](https://github.com/RRYZ09/nukumado/releases) [![ライセンス](https://img.shields.io/badge/code-AGPL--3.0-blue)](LICENSE)
+[![版](https://img.shields.io/github/v/release/RRYZ09/nukumado?label=%E7%89%88&color=d97a93)](https://github.com/RRYZ09/nukumado/releases) [![ライセンス](https://img.shields.io/badge/code-AGPL--3.0-blue)](LICENSE) [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%99%A1-d97a93)](https://github.com/sponsors/RRYZ09)
+
+[English](README.en.md)
 
 スマホで開くと、いまやるとよい小さなことが 1 つだけ出る。入力させない・選ばせない・責めない、で作ったホーム画面です。
 
@@ -54,6 +56,10 @@
 ## 作った人
 
 ありさん。じぶんのために作ったものを、ほかの人にも使ってみてほしくて出しました。
+
+## 応援する
+
+ぬくまどを気に入ってくれたら、[GitHub Sponsors](https://github.com/sponsors/RRYZ09) で応援してもらえるとうれしいです。使ってくれるだけでも、とてもうれしいです。
 
 ## ライセンス
 
