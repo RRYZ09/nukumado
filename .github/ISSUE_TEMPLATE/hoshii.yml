@@ -1,32 +1,32 @@
-name: 💡 こうして ほしい
-description: あったら うれしい もの・変えて ほしい ところ
+name: 💡 こうしてほしい
+description: あったらうれしいもの・変えてほしいところ
 title: "[ほしい] "
 labels: ["ほしい"]
 body:
   - type: markdown
     attributes:
       value: |
-        書いて くれて ありがとう。1 人で 作って いるので、返事は ゆっくり です。ぜんぶは 作れませんが、ぜんぶ 読みます。
-        **名前や 住所など 知られたくない ことは 書かないで ください**(この ページは だれでも 読めます)。
+        書いてくれてありがとう。1 人で作っているので、返事はゆっくりです。ぜんぶは作れませんが、ぜんぶ読みます。
+        **名前や住所など知られたくないことは書かないでください**(このページはだれでも読めます)。
   - type: dropdown
     id: kind
     attributes:
-      label: どんな こと?
-      options: ["ついか(新しく ほしい)", "へんこう(いまの ものを 変えて ほしい)", "そのほか"]
+      label: どんなこと?
+      options: ["ついか(新しくほしい)", "へんこう(いまのものを変えてほしい)", "そのほか"]
     validations:
       required: true
   - type: dropdown
     id: app
     attributes:
-      label: どこの こと?
-      options: ["入口", "🌸 ごじあい", "🍵 ひといき", "⚙️ せってい", "🔰 はじめての しつもん", "新しい アプリ", "そのほか"]
+      label: どこのこと?
+      options: ["入口", "🌸 ごじあい", "🍵 ひといき", "⚙️ せってい", "🔰 はじめてのしつもん", "新しいアプリ", "そのほか"]
     validations:
       required: true
   - type: textarea
     id: what
     attributes:
-      label: どう なったら うれしい?
-      description: こまって いる 場面も あれば 教えて ください(「朝、◯◯の とき」の ように)
+      label: どうなったらうれしい?
+      description: こまっている場面もあれば教えてください(「朝、◯◯のとき」のように)
     validations:
       required: true
   - type: textarea
