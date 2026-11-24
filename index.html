@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>ぬくまど</title>
+<meta name="description" content="ぬくまど — じぶんを いたわる ホーム画面(体験版)。記録は この ブラウザの 中だけに 残ります。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="widget.css">
+<link rel="stylesheet" href="tut.css">
+</head>
+<body class="home">
+<main>
+ <div class="clock" id="clock"></div>
+ <div id="wg"></div>
+ <div class="grid" id="grid" style="padding-bottom:84px"></div>
+</main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script>
+G.home(G.$("grid"));
+</script>
+<script src="widget.js"></script>
+<script>
+GW.mount(G.$("wg"));
+</script>
+<script src="aquarium.js"></script>
+<script src="tut.js"></script>
+</body>
+</html>

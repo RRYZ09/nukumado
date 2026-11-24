@@ -1,0 +1,36 @@
+name: 😣 こまった
+description: うごかない・おかしい・わからない
+title: "[こまった] "
+labels: ["こまった"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        書いて くれて ありがとう。わかる ところ だけで だいじょうぶ です。
+        記録(スタンプや 設定)は ここには 送られません。**名前や 住所など 知られたくない ことは 書かないで ください**(この ページは だれでも 読めます)。
+  - type: dropdown
+    id: app
+    attributes:
+      label: どこで?
+      options: ["入口", "🌸 ごじあい", "🍵 ひといき", "⚙️ せってい", "🔰 はじめての しつもん", "そのほか・わからない"]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: なにが おきた?
+      description: した こと と、おきた こと。「◯◯を 押したら △△に なった」の ように
+      placeholder: タイマーの「歯みがき」を 押したら、画面が 白い ままに なった
+    validations:
+      required: true
+  - type: textarea
+    id: shot
+    attributes:
+      label: スクリーンショット(あれば)
+      description: ここに 画像を 貼りつけられます。知られたくない ものが 写って いないか 見てから 貼って ください
+  - type: textarea
+    id: env
+    attributes:
+      label: つかって いる もの
+      description: アプリの「⚙️ → この アプリに ついて → こまった を 書く」から 来た ときは、自動で 入ります
+      placeholder: "例: Android の Chrome / iPhone の Safari"

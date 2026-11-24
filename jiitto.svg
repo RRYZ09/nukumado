@@ -1,0 +1,15 @@
+<svg viewBox="0 0 160 170" xmlns="http://www.w3.org/2000/svg">
+ <!-- じーっとさん(ハシビロコウ)。💡 ようぼう の 🧪 ベータ のページにいる -->
+ <path d="M70 140 L66 165 M88 140 L92 165" stroke="#6E625A" stroke-width="4" stroke-linecap="round"/>
+ <path d="M57 165 h17 M84 165 h17" stroke="#6E625A" stroke-width="4" stroke-linecap="round"/>
+ <ellipse cx="78" cy="112" rx="38" ry="35" fill="#8C9AA3"/>
+ <path d="M48 98 Q66 142 108 130 Q96 110 48 98Z" fill="#76858F"/>
+ <rect x="62" y="62" width="28" height="40" rx="13" fill="#97A4AC"/>
+ <circle cx="72" cy="50" r="30" fill="#A3AFB6"/>
+ <path d="M52 26 q-9 -12 2 -10 q3 -10 10 1" fill="#A3AFB6"/>
+ <path d="M84 40 Q138 36 152 54 Q154 74 128 80 Q100 84 82 70 Z" fill="#D9C59A"/>
+ <path d="M84 62 Q116 70 150 64" stroke="#B9A274" stroke-width="2.2" fill="none"/>
+ <path d="M146 48 q10 6 4 14" stroke="#B9A274" stroke-width="2.2" fill="none"/>
+ <g class="eye"><circle cx="66" cy="44" r="7.5" fill="#F6F0D8"/><circle cx="68.5" cy="44" r="3.4" fill="#3A322D"/></g>
+ <path d="M56 36 Q66 32 77 38" stroke="#5E6A72" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

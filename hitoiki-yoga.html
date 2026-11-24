@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>ヨガ — ひといき</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="hitoiki.css">
+<style>
+.ys {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 10px;
+}
+.ys h2 {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+.ys .go {
+  flex: none;
+  background: var(--teal);
+  color: #fff;
+  border-radius: 999px;
+  padding: 7px 16px;
+  font: 700 14px var(--head);
+}
+:root[data-theme="dark"] .ys .go {
+  color: #16302d;
+}
+.yg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.yc {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.yc .pose {
+  width: 100%;
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.yc svg {
+  width: 100%;
+  aspect-ratio: 212/140;
+  display: block;
+}
+.yc .tx {
+  padding: 2px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.yc .no {
+  font: 700 11px var(--head);
+  color: var(--teal);
+  letter-spacing: 0.06em;
+}
+.yc b {
+  font: 700 14px/1.4 var(--head);
+  overflow-wrap: anywhere;
+}
+.yc span {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.ys .tg {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--sub);
+  font: 800 14px var(--head);
+  padding: 0;
+}
+.yt .sp {
+  flex: 1;
+}
+.yt .yseg {
+  flex: none;
+  display: flex;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  overflow: hidden;
+}
+.yt .ya {
+  height: 34px;
+  padding: 0 14px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 700 13px var(--head);
+}
+.yt .ya + .ya {
+  border-left: 1.5px solid var(--line);
+}
+.yt .ya:disabled {
+  color: var(--mute);
+  opacity: 0.6;
+}
+.yl {
+  list-style: none;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+} /* たたんだ とき: 動きの 名前だけ */
+.yl li {
+  font: 700 14px/1.45 var(--head);
+  color: var(--ink);
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+.yl li i {
+  font-style: normal;
+  color: var(--teal);
+  font-size: 12px;
+  min-width: 1.2em;
+  padding-top: 2px;
+}
+</style>
+</head>
+<body>
+<main id="m"></main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script src="bgm.js"></script>
+<script src="hitoiki.js"></script>
+<script src="hitoiki-koe.js"></script>
+<script>
+// 🧘 ヨガ: ゆるヨガ・床ヨガ・いすヨガ・肩こりヨガ・のびのびヨガ・ねる前ヨガ の ポーズを ぜんぶ 絵で ならべる(動く)。「はじめる」で そのタイマー
+const {$, el} = G;
+function draw() {
+  const m = $("m");
+  m.textContent = "";
+  // 上の 1 行: ぜんぶ ひらく・ぜんぶ たたむ(左)と 読む(右上。いま・タイマー と おなじ)
+  const top = el("div", "tline yt"),
+    ks = KS.filter(k => !HK.TM[k].mix);
+  const all = el("button", "ya", "ぜんぶ ひらく"),
+    none = el("button", "ya", "ぜんぶ たたむ");
+  all.disabled = ks.every(k => OPEN.has(k));
+  none.disabled = !ks.some(k => OPEN.has(k));
+  all.onclick = () => setOpen(ks);
+  none.onclick = () => setOpen([]);
+  const seg = el("div", "yseg");
+  seg.append(all, none); // 2 つで 1 つの 枠(げんき の 3 つと 同じ 形)
+  top.append(seg, el("span", "sp"));
+  if (window.KOE) top.append(KOE.bar(true));
+  m.append(top);
+  for (const k of KS) {
+    const t = HK.TM[k],
+      hd = el("div", "ys"),
+      go = el("button", "go", "はじめる");
+    go.onclick = () => HK.startTimer(k);
+    const isOpen = OPEN.has(k),
+      tg = el("button", "tg", isOpen ? "▴" : "▾"); // ひらくと 絵、たたむと 動きの 名前だけ(この端末で 覚える)
+    tg.setAttribute("aria-label", isOpen ? "たたむ" : "絵を 見る");
+    tg.setAttribute("aria-expanded", String(isOpen));
+    tg.onclick = () => flip(k);
+    hd.append(el("h2", null, `${t.e} ${t.n}・${t.d}`));
+    if (!t.mix) hd.append(tg);
+    hd.append(go);
+    m.append(hd);
+    const g = el("div", "yg");
+    if (!t.mix && !isOpen) {
+      const ul = el("ol", "yl");
+      ul.onclick = () => flip(k);
+      t.steps.forEach((s, i) => {
+        const li = el("li");
+        li.append(el("i", null, `${i + 1}`), document.createTextNode(s.t));
+        ul.append(li);
+      });
+      m.append(ul);
+      continue;
+    }
+    if (t.mix) {
+      m.append(
+        el("p", "sub", "首・肩 から 3 つ、足・こし から 3 つ を はじめるたびに えらびます(50 びょうずつ)。ポーズは 上の 2 つの コースと 同じです。"),
+      );
+      continue;
+    }
+    t.steps.forEach((s, i) => {
+      const c = el("div", "yc"),
+        tx = el("div", "tx");
+      c.innerHTML = `<div class="pose">${HK.poseSvg(s.pose)}</div>`; // .pose の中で 色が付く
+      tx.append(el("span", "no", `${i + 1} / ${t.steps.length}・${Math.round(s.s)}びょう`), el("b", null, s.t), el("span", null, s.sub));
+      c.append(tx);
+      g.append(c);
+    });
+    m.append(g);
+  }
+  HK.help(m, "タイマーで ひとつずつ 出る ポーズです。「はじめる」で 音つきで はじまります(とちゅうで 🎵 を押すと 止まります)。");
+}
+const OK = "hitoiki-yoga-open";
+let OPEN = new Set(); // ひらいた コース(はじめは ぜんぶ たたむ)
+try {
+  OPEN = new Set(JSON.parse(localStorage.getItem(OK) || "[]"));
+} catch (e) {}
+const KS = ["yoga5", "yuka", "yukaAll", "isu", "katakori", "yoga10", "nemae"];
+function setOpen(ks) {
+  OPEN = new Set(ks);
+  try {
+    localStorage.setItem(OK, JSON.stringify([...OPEN]));
+  } catch (e) {}
+  draw();
+}
+function flip(k) {
+  const o = new Set(OPEN);
+  o.has(k) ? o.delete(k) : o.add(k);
+  setOpen([...o]);
+}
+G.start("hitoiki-yoga", () => {})
+  .then(() => BGM.load())
+  .then(draw);
+G.gear(); // ⚙️ せってい を 帯の 右に
+</script>
+</body>
+</html>

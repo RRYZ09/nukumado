@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>せってい — ひといき</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="hitoiki.css">
+<style>
+.rw {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--line);
+  font: 700 16px var(--head);
+}
+.rw:last-child {
+  border-bottom: 0;
+}
+.rw input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--teal);
+  flex: none;
+}
+.rw span {
+  flex: 1;
+  min-width: 0;
+}
+.seg {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.seg button {
+  flex: 1 1 0;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font: 700 14px var(--head);
+  background: var(--card);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.seg button.on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] .seg button.on {
+  color: #16302d;
+}
+.rw .gr {
+  flex: none;
+  color: var(--mute);
+  font-size: 18px;
+  padding: 0 4px;
+  touch-action: none;
+} /* 長押しで つまむ しるし */
+.rw.dragging {
+  background: var(--card);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  position: relative;
+  z-index: 2;
+  border-radius: 10px;
+}
+.hq {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--sub);
+  font: 800 13px var(--head);
+  padding: 0;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+h2 + .sub {
+  margin: -4px 0 8px;
+}
+.golink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  font: 700 16px var(--head);
+}
+.golink span {
+  flex: 1;
+}
+.golink i {
+  font-style: normal;
+  color: var(--mute);
+}
+</style>
+</head>
+<body>
+<main id="m"></main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script src="bgm.js"></script>
+<script src="hitoiki.js"></script>
+<script>
+// ⚙️ ひといき の せってい: いま に 出すもの・げんき の 決め方・🎵 きょく へ。押したら すぐ 覚える(apps/hitoiki.py の ui)
+const {$, el} = G;
+const KINDS = [
+  ["brush", "🪥 歯みがき"],
+  ["breath", "🌬️ ゆっくり呼吸"],
+  ["yoga", "🧘 ヨガ"],
+  ["song", "🎵 1曲 休む"],
+  ["look", "🪟 遠くを 見る"],
+  ["walk", "🚶 外を 歩く"],
+  ["shelf", "📚 たな の 中身"],
+];
+async function save(u, msg) {
+  const r = await HK.send({ui: u}, msg);
+  if (r) {
+    draw();
+    HK.tabs(r.ui);
+  }
+}
+function draw() {
+  const m = $("m");
+  m.textContent = "";
+  if (!HK.D) {
+    m.append(el("div", "empty", "つながりませんでした。Tailscale を見てください"));
+    return;
+  }
+  const U = HK.D.ui || {off: [], genki: "auto"},
+    off = new Set(U.off);
+  // いま に 出すもの
+  const b1 = el("div", "box");
+  b1.style.padding = "2px 14px";
+  for (const [k, n] of KINDS) {
+    const l = el("label", "rw"),
+      c = el("input");
+    c.type = "checkbox";
+    c.checked = !off.has(k);
+    c.onchange = () => {
+      c.checked ? off.delete(k) : off.add(k);
+      save({off: [...off]}, c.checked ? `${n} を 出します` : `${n} は 出しません`);
+    };
+    l.append(c, el("span", null, n));
+    b1.append(l);
+  }
+  m.append(el("h2", null, "🍃 いま に 出すもの"), b1);
+  // ページ の 並び・出すか(長押しで つまんで 並べかえ。チェックを はずすと タブに 出さない)
+  if (PAGES.length) {
+    const T = U.tabs || {order: [], hide: []},
+      hide = new Set(T.hide),
+      at = id => {
+        const i = T.order.indexOf(id);
+        return i < 0 ? 1e6 : i;
+      };
+    const ps = PAGES.slice().sort((a, b) => at(a.id) - at(b.id) || PAGES.indexOf(a) - PAGES.indexOf(b));
+    const b0 = el("div", "box");
+    b0.style.padding = "2px 14px";
+    const saveTabs = msg => save({tabs: {order: [...b0.querySelectorAll(".rw")].map(r => r.dataset.k), hide: [...hide]}}, msg);
+    for (const p of ps) {
+      const l = el("label", "rw"),
+        c = el("input");
+      c.type = "checkbox";
+      c.checked = !hide.has(p.id);
+      l.dataset.k = p.id;
+      c.onchange = () => {
+        c.checked ? hide.delete(p.id) : hide.add(p.id);
+        saveTabs(c.checked ? `${p.e} ${p.t} を 出します` : `${p.e} ${p.t} は 出しません`);
+      };
+      l.append(c, el("span", null, `${p.e} ${p.t}`), el("span", "gr", "≡"));
+      b0.append(l);
+    }
+    G.slide(b0, ".rw", () => saveTabs("並びを 覚えました"));
+    const hd = el("h2", null, "📑 ページ "),
+      hq = el("button", "hq", "？"),
+      ht = el(
+        "div",
+        "sub",
+        "タブに 出す ページと 並びです。行を 長押しすると つまめるので、上下に すべらせて はなすと 並びを 覚えます。チェックを はずすと タブに 出しません(⚙️ せってい は いつも 出ます)。",
+      ); // ？ は 見出しの 右横
+    hq.setAttribute("aria-label", "ページの せつめい");
+    ht.hidden = !pgHelp;
+    hq.onclick = () => {
+      pgHelp = !pgHelp;
+      ht.hidden = !pgHelp;
+    };
+    hd.append(hq);
+    m.append(hd, ht, b0);
+  }
+  // げんき
+  const b2 = el("div", "box"),
+    seg = el("div", "seg");
+  for (const [v, n] of [
+    ["auto", "からだ から"],
+    ["fix", "いつも びみょう"],
+  ]) {
+    const x = el("button", U.genki === v ? "on" : null, n);
+    x.onclick = () => {
+      if (U.genki !== v) save({genki: v}, "変えました");
+    };
+    seg.append(x);
+  }
+  b2.append(
+    seg,
+    el(
+      "div",
+      "sub",
+      U.genki === "auto"
+        ? "🫧 からだ の「いまの からだ」か ゆうべの ねむり から 決めます。いま の画面で 押すと その日だけ 変わります。"
+        : "いつも ☁️ びみょう から はじめます。いま の画面で 押すと その日だけ 変わります。",
+    ),
+  );
+  m.append(el("h2", null, "🌡️ げんき の 決めかた"), b2);
+  // きょく
+  const b3 = el("div", "box"),
+    a = el("a", "golink");
+  a.href = "hitoiki-kyoku.html";
+  a.append(el("span", null, "🎵 タイマーで 流す 曲"), el("i", null, "›"));
+  b3.append(a);
+  m.append(el("h2", null, "🎵 きょく"), b3);
+  m.append(HOW);
+  drawLink();
+}
+/* 🔗 つなぎ方(🎙️ こえ)。前は こえ の ページに あった */
+const HOW = el("details", "how");
+HOW.id = "how";
+HOW.innerHTML = `<summary>🔗 つなぎ方 <small>🎙️ こえ(ElevenLabs・VOICEVOX)</small></summary>
+  <div class="sub">タイマーの 読み上げの 声は、1 回だけ 作って この PC に 置きます。下の どちらか 1 つ あれば 作れます。</div>
+  <div class="box lk">
+   <h3>ElevenLabs <span class="st" id="el-st"></span></h3>
+   <div class="sub" id="el-now"></div>
+   <div id="el-how">
+    <ol>
+     <li><a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener">ElevenLabs の API キー</a> の ページを 開いて、キーを 作る</li>
+     <li>出てきた キーを 下に 貼って「つなぐ」。ElevenLabs に 1 回 聞いて 確かめます</li>
+    </ol>
+    <input id="el-key" type="password" autocomplete="off" spellcheck="false" placeholder="API キー(sk_…)" aria-label="ElevenLabs の API キー">
+    <button class="go" id="el-go" type="button">つなぐ</button>
+   </div>
+   <button class="soft" id="el-re" type="button" hidden>キーを 入れ直す</button>
+   <button class="soft" id="el-off" type="button" hidden>ここに 入れた キーを 外す</button>
+   <div class="sub">外の サービスです(月ごとに 使える 文字数が あります)。キーは この PC の <code>data/elevenlabs_key.json</code> に 置きます(ほかの 人は 読めません)。</div>
+  </div>
+  <div class="box lk">
+   <h3>VOICEVOX <span class="st" id="vv-st"></span></h3>
+   <div class="sub">この PC の 中だけで 声を 作ります(外へ 送らない・文字数も 使わない)。PC で VOICEVOX の エンジンが 動いて いれば、自動で つながります。</div>
+   <div class="pc">🖥️ PC で: VOICEVOX の エンジンを <code>127.0.0.1:50021</code> で 動かして おく</div>
+  </div>
+  <div class="sub" style="margin-top:10px">声を えらぶ・作る のは <a href="hitoiki-koe.html">🎙️ こえ</a> の ページで。</div>`;
+let LK = null,
+  elEdit = false;
+const kpost = async body =>
+  (await fetch("api/hitoiki/koe", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)})).json();
+function drawLink() {
+  const q = id => HOW.querySelector("#" + id);
+  if (!LK) return;
+  const e = q("el-st"),
+    v = q("vv-st");
+  e.textContent = LK.el ? "✓ 連携ずみ" : "まだ";
+  e.className = "st" + (LK.el ? " ok" : "");
+  v.textContent = LK.vv ? "✓ 動いて います" : "動いて いません";
+  v.className = "st" + (LK.vv ? " ok" : "");
+  q("el-now").textContent =
+    LK.el === "pc" ? "PC に 置いて ある キーで つながって います。" : LK.el === "here" ? "ここに 入れた キーで つながって います。" : "";
+  q("el-how").hidden = !!LK.el && !elEdit;
+  q("el-re").hidden = !LK.el || elEdit;
+  q("el-off").hidden = LK.el !== "here";
+  if ((!LK.el && !LK.vv) || location.hash === "#how") HOW.open = true;
+}
+HOW.querySelector("#el-re").onclick = () => {
+  elEdit = true;
+  drawLink();
+};
+HOW.querySelector("#el-go").onclick = async () => {
+  const inp = HOW.querySelector("#el-key"),
+    b = HOW.querySelector("#el-go"),
+    key = inp.value.trim();
+  if (!key) return G.toast("API キーを 貼ってね");
+  b.disabled = true;
+  b.textContent = "ElevenLabs に 聞いて います…";
+  try {
+    const j = await kpost({key});
+    if (j.ok) {
+      LK = j.link;
+      elEdit = false;
+      inp.value = "";
+      G.toast("ElevenLabs に つながりました");
+    } else G.toast(j.msg || "つなげませんでした");
+  } catch (x) {
+    G.toast("つながりませんでした。Tailscale を見てください");
+  }
+  b.disabled = false;
+  b.textContent = "つなぐ";
+  drawLink();
+};
+HOW.querySelector("#el-off").onclick = async () => {
+  if (!confirm("ここに 入れた ElevenLabs の キーを 外しますか?")) return;
+  try {
+    const j = await kpost({key: null});
+    if (j.ok) {
+      LK = j.link;
+      G.toast("外しました");
+    }
+  } catch (x) {
+    G.toast("外せませんでした");
+  }
+  drawLink();
+};
+kpost({link: 1})
+  .then(j => {
+    LK = j.link;
+    drawLink();
+  })
+  .catch(() => {});
+let PAGES = [],
+  pgHelp = false; // apps.json の ひといき の ページ(⚙️ は のぞく)
+G.start("hitoiki-settei", () => {})
+  .then(() =>
+    fetch("apps.json", {cache: "no-store"})
+      .then(r => r.json())
+      .then(j => {
+        const a = (Array.isArray(j) ? j : j.apps || []).find(x => x.id === "hitoiki");
+        PAGES = a ? a.pages.filter(p => p.id !== "hitoiki-settei") : [];
+      })
+      .catch(() => {}),
+  )
+  .then(() => HK.load())
+  .then(() => {
+    draw();
+    HK.tabs(HK.D && HK.D.ui);
+  });
+G.gear();
+</script>
+</body>
+</html>

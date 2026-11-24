@@ -1,0 +1,354 @@
+/* 🧩 入口のウィジェット(アプリ 1 行 × 4 つぶん) */
+.gw {
+  display: flex;
+  align-items: stretch;
+  height: 98px;
+  margin-top: 12px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--card) 84%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 6px rgba(58, 50, 45, 0.18);
+  color: var(--ink);
+}
+.gw > section {
+  min-width: 0;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  border-left: 1px solid var(--line);
+  cursor: pointer;
+}
+.gw > section:first-child {
+  border-left: 0;
+}
+.gw .s-wx {
+  flex: none;
+  padding: 8px 8px 8px 12px;
+}
+.gw .s-ev,
+.gw .s-todo {
+  flex: 1;
+}
+.gw .s-light {
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  cursor: default;
+}
+.gw .s-add {
+  flex: none;
+  width: 62px;
+  align-items: center;
+  padding: 0;
+  cursor: default;
+}
+.gw .big {
+  font: 800 21px/1.15 var(--head);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.gw .big .um {
+  font-size: 15px;
+  margin-left: 3px;
+}
+.gw .sm {
+  font: 700 11px/1.45 var(--head);
+  letter-spacing: -0.02em;
+  color: var(--sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gw .dim {
+  font: 700 12.5px var(--head);
+  color: var(--sub);
+}
+.gw .dim.one {
+  white-space: nowrap;
+  text-align: center;
+}
+.gw .row {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font: 700 13px/1.45 var(--head);
+  min-width: 0;
+}
+.gw .row b {
+  flex: none;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--teal);
+}
+.gw .row.now b {
+  color: var(--acc);
+}
+.gw .row span {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gw .more {
+  font: 700 11px var(--head);
+  color: var(--sub);
+}
+.gw .lb {
+  width: 46px;
+  height: 62px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  background: var(--field);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  color: var(--sub);
+}
+.gw .lb i {
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.gw .lb span {
+  font: 700 11px var(--head);
+  max-width: 42px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.gw .lb.on {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.gw .lb.on i {
+  filter: none;
+  opacity: 1;
+}
+.gw .lb.q {
+  border-style: dashed;
+}
+.gw .lb:disabled {
+  opacity: 0.55;
+}
+.gw .plus {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  font: 400 28px/1 var(--head);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+:root[data-theme="dark"] .gw .plus {
+  color: #16302d;
+}
+/* ⚙️ の「🧩 ウィジェット」 */
+.gws .nm small {
+  display: block;
+  font-size: 12px;
+  color: var(--sub);
+  font-weight: 600;
+}
+.gws .pen:disabled {
+  opacity: 0.3;
+}
+/* ☀️ 時計の横に出すとき(clock.with-wx) */
+.clock.with-wx {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
+}
+.clock.with-wx .tm {
+  grid-column: 1;
+  grid-row: 1;
+}
+.clock.with-wx .dt {
+  grid-column: 1;
+  grid-row: 2;
+}
+.clock .ckwx {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  text-align: left;
+  cursor: pointer;
+}
+.clock .ckwx .big {
+  font: 800 30px/1.1 var(--head);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.clock .ckwx .big .um {
+  font-size: 20px;
+  margin-left: 4px;
+}
+.clock .ckwx .sm {
+  font: 700 14px/1.5 var(--head);
+  white-space: nowrap;
+}
+.clock .ckwx .dim {
+  font: 700 14px var(--head);
+}
+.gwp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+}
+.gwp .nm {
+  flex: 1;
+  font: 700 15px var(--head);
+}
+.seg2 {
+  display: flex;
+  background: var(--field);
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  padding: 3px;
+  gap: 2px;
+}
+.seg2 button {
+  border-radius: 99px;
+  padding: 6px 12px;
+  font: 700 14px var(--head);
+  color: var(--sub);
+}
+.seg2 button.on {
+  background: var(--teal);
+  color: #fff;
+}
+.gwr {
+  flex-wrap: wrap;
+}
+.seg2.multi button.on {
+  background: var(--gold-soft);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+}
+.gwsub {
+  margin: 14px 2px 6px;
+}
+/* 🔗 ショートカット */
+.gw .s-sc {
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  cursor: default;
+}
+.gw .scb {
+  width: 46px;
+  height: 62px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  background: var(--field);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.gw .scb i {
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+}
+.gw .scb span {
+  font: 700 10.5px var(--head);
+  max-width: 42px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 帯を アプリの下 に出すとき(下の「はなしかける」の欄のぶん 空ける) */
+.gw.bottom {
+  margin: 22px 0 84px;
+}
+.gwsc .scr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.gwsc .scr i {
+  font-style: normal;
+  font-size: 22px;
+}
+.gwsc .scr .nm {
+  flex: 1;
+  font: 700 15px var(--head);
+}
+.gwsc .btn {
+  margin-top: 10px;
+}
+dialog.ui .picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 12px;
+  max-height: 30vh;
+  overflow: auto;
+}
+dialog.ui .picks button {
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  padding: 5px 11px;
+  font: 700 13.5px var(--head);
+  background: var(--field);
+}
+.gw[hidden] {
+  display: none;
+} /* display:flex より 隠すほうを強く(出さないときに白い帯が残らないように) */
+.gw .tag {
+  font: 700 10.5px var(--head);
+  color: var(--sub);
+  margin-bottom: 1px;
+} /* 夜は「あした」の分 */
+/* ⚙️ の ウィジェット: 1 つの 枠の 中に 行を 並べる */
+.gwall {
+  margin-top: 10px;
+  padding: 2px 0;
+  overflow: hidden;
+}
+.gwall .box {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  margin: 0;
+  box-shadow: none;
+}
+.gwall > .box + .box,
+.gwall > div > .box {
+  border-top: 1px solid var(--line);
+}
+h2 .q {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  color: var(--sub);
+  font: 700 13px var(--head);
+  vertical-align: 2px;
+}

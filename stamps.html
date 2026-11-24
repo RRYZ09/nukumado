@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>スタンプ帳 — ごじあい</title>
+<link rel="icon" href="icon.svg">
+<meta name="theme-color" content="#B84E33">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<style>
+.mnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0 10px;
+}
+.mnav h2 {
+  margin: 0;
+}
+.mnav button {
+  width: 44px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--gold-soft);
+  font-size: 16px;
+}
+.mnav button:disabled {
+  opacity: 0.3;
+}
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.cal .w {
+  font-size: 11px;
+  color: var(--sub);
+  text-align: center;
+}
+.cal .d {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  min-height: 58px;
+  padding: 3px 2px;
+  font-size: 10px;
+  color: var(--sub);
+  overflow: hidden;
+}
+.cal .d.now {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+}
+.cal .d.off {
+  visibility: hidden;
+}
+.cal .d.sel {
+  outline: 2px solid var(--acc);
+}
+.cal .d i {
+  display: block;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.25;
+  letter-spacing: -1px;
+  text-align: center;
+  word-break: break-all;
+}
+.dayline {
+  font-size: 13.5px;
+  color: var(--sub);
+  margin-top: 10px;
+  min-height: 1.6em;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14.5px;
+}
+.row span {
+  flex: 1;
+}
+.row button {
+  padding: 8px 10px;
+  color: var(--sub);
+  font-size: 13px;
+}
+.add {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.add input,
+.add select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--field);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  min-width: 0;
+}
+.add select,
+.add .go {
+  grid-column: 1/-1;
+}
+.add .go {
+  background: var(--teal);
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px;
+  font: 700 15px var(--head);
+}
+</style>
+</head>
+<body>
+<main>
+ <div class="mnav"><button id="prev" aria-label="前の月">◀</button><h2 id="mlabel"></h2><button id="next" aria-label="次の月">▶</button></div>
+ <div class="cal" id="cal"></div>
+ <div class="dayline" id="dayline"></div>
+ <h2>ご自愛カード</h2>
+ <div class="sub">元気な日に、足したり消したりしてね。</div>
+ <div id="cards"></div>
+ <div class="add">
+  <input id="ne" maxlength="4" placeholder="絵文字" aria-label="絵文字">
+  <input id="nt" maxlength="60" placeholder="ちいさくできること" aria-label="カードの文">
+  <select id="nk" aria-label="なかま"></select>
+  <button class="go" id="addcard">カードを足す</button>
+ </div>
+ <p class="sub">1日の区切りは朝4時です。夜ふかしの分は前の日に数えます。押しまちがえたスタンプは、「いま」の「きょうのスタンプ」を押すと消せます。</p>
+</main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script>
+const {$, el} = G;
+let month = null,
+  selDay = null;
+const shift = n => {
+  const [y, m] = month.split("-").map(Number),
+    d = new Date(y, m - 1 + n, 1);
+  month = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  render(G.S);
+};
+
+function render(S) {
+  if (!month) month = S.today.slice(0, 7);
+  const [y, m] = month.split("-").map(Number),
+    cal = $("cal");
+  cal.textContent = "";
+  $("mlabel").textContent = `${y}年${m}月`;
+  $("next").disabled = month >= S.today.slice(0, 7);
+  for (const w of "日月火水木金土") cal.append(el("div", "w", w));
+  const by = {};
+  for (const s of S.stamps) (by[s.day] = by[s.day] || []).push(s);
+  const first = new Date(y, m - 1, 1).getDay(),
+    last = new Date(y, m, 0).getDate();
+  for (let i = 0; i < first; i++) cal.append(el("div", "d off"));
+  for (let i = 1; i <= last; i++) {
+    const key = `${month}-${String(i).padStart(2, "0")}`,
+      list = by[key] || [];
+    const d = el("div", "d" + (key === S.today ? " now" : "") + (key === selDay ? " sel" : ""), i);
+    if (list.length)
+      d.append(
+        el(
+          "i",
+          null,
+          list
+            .slice(0, 4)
+            .map(s => s.e)
+            .join("") + (list.length > 4 ? "+" + (list.length - 4) : ""),
+        ),
+      );
+    d.onclick = () => {
+      selDay = key;
+      render(S);
+    };
+    cal.append(d);
+  }
+  const sel = by[selDay] || [];
+  $("dayline").textContent =
+    selDay && selDay.startsWith(month)
+      ? `${Number(selDay.slice(5, 7))}/${Number(selDay.slice(8))}: ` +
+        (sel.length ? sel.map(s => `${s.e}${s.t}`).join("、") : "スタンプなし(休んだ日)")
+      : "日を押すと、その日のスタンプが読めます。";
+
+  const box = $("cards");
+  box.textContent = "";
+  for (const c of S.cards) {
+    const row = el("div", "row"),
+      del = el("button", null, "消す");
+    del.onclick = () => {
+      if (confirm(`「${c.t}」を消しますか?`)) G.api("api/cards", {cards: S.cards.filter(x => x.id !== c.id)});
+    };
+    row.append(el("span", null, `${c.e} ${c.t}`), del);
+    box.append(row);
+  }
+}
+
+$("prev").onclick = () => shift(-1);
+$("next").onclick = () => shift(1);
+for (const [k, v] of Object.entries(G.KIND)) {
+  const o = el("option", null, v);
+  o.value = k;
+  $("nk").append(o);
+}
+$("nk").value = "kibun";
+$("addcard").onclick = async () => {
+  const t = $("nt").value.trim();
+  if (!t) return $("nt").focus();
+  await G.api("api/cards", {cards: [...G.S.cards, {id: "c" + Date.now(), e: $("ne").value.trim() || "🌸", t, k: $("nk").value}]});
+  $("nt").value = "";
+  $("ne").value = "";
+  G.toast("カードを足しました");
+};
+G.start("stamps", render);
+</script>
+</body>
+</html>

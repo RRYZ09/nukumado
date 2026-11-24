@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>いま — ごじあい</title>
+<link rel="icon" href="icon.svg">
+<meta name="theme-color" content="#B84E33">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<style>
+.hello {
+  font: 700 21px/1.4 var(--head);
+  margin: 4px 0 8px;
+  text-wrap: balance;
+}
+a.here {
+  display: block;
+  text-decoration: none;
+  font-size: 13.5px;
+  color: var(--sub);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 12px;
+}
+a.here b {
+  color: var(--ink);
+}
+a.here.cold {
+  background: var(--cold-soft);
+  border-color: var(--cold);
+}
+.card {
+  background: var(--card);
+  border: 1.5px solid #efbfaf;
+  box-shadow: 0 0 0 3px var(--acc-soft);
+  border-radius: 22px;
+  padding: 24px 18px 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+.card .e {
+  font-size: 64px;
+  line-height: 1.1;
+}
+.card .t {
+  font: 700 21px/1.5 var(--head);
+  margin: 10px 0 2px;
+  text-wrap: balance;
+  word-break: auto-phrase;
+}
+.card .k {
+  font-size: 12px;
+  color: var(--sub);
+  margin-bottom: 16px;
+}
+.done {
+  display: block;
+  width: 100%;
+  background: var(--acc-d);
+  color: #fff;
+  font: 700 20px var(--head);
+  padding: 15px;
+  border-radius: 999px;
+}
+.done:active {
+  transform: scale(0.97);
+}
+.skip {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px;
+  font-size: 15px;
+  color: var(--sub);
+}
+.kihon {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.kihon button {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 10px 4px 8px;
+  font-size: 13px;
+  position: relative;
+}
+.kihon button:active {
+  transform: scale(0.95);
+}
+.kihon .e {
+  display: block;
+  font-size: 28px;
+  line-height: 1.2;
+}
+.kihon .n {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: 2px solid var(--acc);
+  color: var(--acc);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  transform: rotate(-8deg);
+}
+.today {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 44px;
+}
+.st {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 3px solid var(--acc);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+.st small {
+  font-size: 9px;
+  color: var(--acc);
+  font-weight: 700;
+  margin-top: 2px;
+}
+.st:nth-child(3n) {
+  transform: rotate(-7deg);
+}
+.st:nth-child(3n + 1) {
+  transform: rotate(5deg);
+}
+.st:nth-child(3n + 2) {
+  transform: rotate(-2deg);
+}
+</style>
+</head>
+<body>
+<main>
+ <div class="hello" id="hello">　</div>
+ <a class="here" id="here" href="samusa.html"></a>
+ <div class="card">
+  <div class="e" id="ce">🌸</div>
+  <div class="t" id="ct">よみこみ中…</div>
+  <div class="k" id="ck"></div>
+  <button class="done" id="done">できたよ</button>
+  <button class="skip" id="skip">べつのにする</button>
+ </div>
+ <h2>きほんのスタンプ</h2>
+ <div class="kihon" id="kihon"></div>
+ <h2>きょうのスタンプ</h2>
+ <div class="today" id="today"></div>
+</main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script>
+const {$, el} = G;
+const KIHON = [
+  ["gohan", "🍚", "ごはん"],
+  ["nomi", "🍵", "のみもの"],
+  ["furo", "🛁", "おふろ"],
+  ["nuku", "🧦", "ぬくぬく"],
+  ["soto", "☀️", "そと"],
+  ["neru", "🌙", "ねるじゅんび"],
+];
+let cur = null,
+  skipped = new Set();
+const todays = S => S.stamps.filter(s => s.day === S.today);
+
+// カードの選び方: いまいるところの寒さ・乾き・空気、外の日ざし、ごはんがまだか、時間帯で出やすさを変える
+function pick(S) {
+  const b = G.band(S.hour),
+    env = S.env,
+    h = env.here || {},
+    out = env.out || {},
+    done = new Set(
+      todays(S)
+        .map(s => s.card)
+        .filter(Boolean),
+    );
+  const ate = todays(S).some(s => s.k === "gohan"),
+    away = !!h.out;
+  /* 季節: 冬(11〜3 月)は 冷やす カード("s": "hot")、夏(6〜9 月)は 温める カード("s": "cold")を 出さない */
+  const mo = new Date().getMonth() + 1,
+    off = mo >= 11 || mo <= 3 ? "hot" : mo >= 6 && mo <= 9 ? "cold" : "",
+    fit = c => !off || c.s !== off;
+  let pool = S.cards.filter(c => fit(c) && (!c.w || c.w.includes(b)) && !done.has(c.id) && !skipped.has(c.id));
+  if (!pool.length) {
+    skipped.clear();
+    pool = S.cards.filter(c => fit(c) && (!c.w || c.w.includes(b)));
+  }
+  if (!pool.length) pool = S.cards;
+  if (!pool.length) return null;
+  if (G.rest) {
+    const soft = pool.filter(c => ["nuku", "nomi", "neru"].includes(c.k));
+    if (soft.length) pool = soft;
+  } // 🌙 おやすみ中は軽いものだけ
+  const w = pool.map(c => {
+    let x = 1;
+    if (c.k === "nuku" && h.temp != null) x *= h.temp < 19 ? 3 : h.temp < 21 ? 1.6 : 1;
+    if (c.dry && h.hum != null && h.hum < 35) x *= 2;
+    if (c.air && !away && (env.eco2 || 0) > 1000) x *= 3;
+    if (c.k === "soto" && out.day && out.rad > 200) x *= 2.5;
+    if (c.k === "gohan" && !ate && S.hour >= 11) x *= 3;
+    if (c.k === "neru") x *= 4;
+    if (cur && c.id === cur.id) x *= 0.01;
+    return x;
+  });
+  let n = Math.random() * w.reduce((a, v) => a + v, 0);
+  for (let i = 0; i < pool.length; i++) {
+    n -= w[i];
+    if (n <= 0) return pool[i];
+  }
+  return pool[pool.length - 1];
+}
+
+function showCard(S) {
+  if (!cur || !S.cards.some(c => c.id === cur.id)) cur = pick(S);
+  $("ce").textContent = cur ? cur.e : "🌸";
+  $("ct").textContent = cur ? cur.t : "カードがまだありません";
+  $("ck").textContent = cur ? G.KIND[cur.k] || "" : "";
+  $("done").disabled = !cur;
+}
+
+function render(S) {
+  $("hello").textContent = {
+    asa: "おはよう。まずはひとつだけ。",
+    hiru: "ひとつだけ、やってみよう。",
+    yoru: "おつかれさま。ひとつだけ。",
+    neru: "もう夜だね。ねるじゅんびをひとつ。",
+  }[G.band(S.hour)];
+  const env = S.env,
+    h = env.here,
+    here = $("here");
+  here.textContent = "";
+  here.classList.toggle("cold", !!(h && h.temp != null && h.temp < (h.out ? 10 : 19)));
+  if (h) {
+    here.append(
+      el(
+        "b",
+        null,
+        "📍 " + h.label + (h.temp != null ? ` ${h.temp.toFixed(1)}℃` + (h.out ? "(体感)" : h.hum != null ? `・${Math.round(h.hum)}%` : "") : ""),
+      ),
+      "　" + G.hint(env) + " ›",
+    );
+  } else here.append("📍 いまいるところが、まだわからないよ ›");
+  showCard(S);
+
+  const t = todays(S),
+    kh = $("kihon");
+  kh.textContent = "";
+  for (const [k, e, name] of KIHON) {
+    const btn = el("button"),
+      n = t.filter(s => s.k === k).length;
+    btn.append(el("span", "e", e), name);
+    if (n) btn.append(el("span", "n", n));
+    btn.onclick = () => G.stamp({e, t: name, k, src: "kihon"});
+    kh.append(btn);
+  }
+  const td = $("today");
+  td.textContent = "";
+  if (!t.length) td.append(el("div", "empty", "まだゼロでも大丈夫。ここを開いただけで、ひとつめ。"));
+  for (const s of t) {
+    const b2 = el("button", "st");
+    b2.title = s.t;
+    b2.append(s.e, el("small", null, s.ts.slice(11, 16)));
+    b2.onclick = () => {
+      if (confirm(`「${s.t}」(${s.ts.slice(11, 16)})のスタンプを消しますか?`)) G.api("api/unstamp", {id: s.id});
+    };
+    td.append(b2);
+  }
+}
+
+$("done").onclick = async () => {
+  if (!cur) return;
+  const c = cur;
+  cur = null;
+  await G.stamp({e: c.e, t: c.t, k: c.k, src: "card", card: c.id});
+};
+$("skip").onclick = () => {
+  if (cur) skipped.add(cur.id);
+  cur = pick(G.S);
+  showCard(G.S);
+};
+G.start("ima", render);
+</script>
+</body>
+</html>

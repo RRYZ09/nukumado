@@ -1,0 +1,60 @@
+[
+ {
+  "id": "gojiai",
+  "e": "🌸",
+  "t": "ごじあい",
+  "c": "#B84E33",
+  "pages": [
+   {
+    "id": "ima",
+    "e": "🌸",
+    "t": "いま",
+    "u": "ima.html"
+   },
+   {
+    "id": "stamps",
+    "e": "📅",
+    "t": "スタンプ帳",
+    "u": "stamps.html"
+   }
+  ]
+ },
+ {
+  "id": "hitoiki",
+  "e": "🍵",
+  "t": "ひといき",
+  "c": "#5E8C6A",
+  "pages": [
+   {
+    "id": "hitoiki",
+    "e": "🍵",
+    "t": "いま",
+    "u": "hitoiki.html"
+   },
+   {
+    "id": "hitoiki-timer",
+    "e": "⏱️",
+    "t": "タイマー",
+    "u": "hitoiki-timer.html"
+   },
+   {
+    "id": "hitoiki-yoga",
+    "e": "🧘",
+    "t": "ヨガ",
+    "u": "hitoiki-yoga.html"
+   },
+   {
+    "id": "hitoiki-kyoku",
+    "e": "🎵",
+    "t": "きょく",
+    "u": "hitoiki-kyoku.html"
+   },
+   {
+    "id": "hitoiki-settei",
+    "e": "⚙️",
+    "t": "せってい",
+    "u": "hitoiki-settei.html"
+   }
+  ]
+ }
+]

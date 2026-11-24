@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>きょく — ひといき</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="hitoiki.css">
+<style>
+.kr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.kr:last-child {
+  border-bottom: 0;
+}
+.kr .pl {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  font-size: 16px;
+}
+:root[data-theme="dark"] .kr .pl {
+  color: #16302d;
+}
+.kr .tx {
+  flex: 1;
+  min-width: 0;
+}
+.kr .n {
+  font: 700 15.5px var(--head);
+  overflow-wrap: anywhere;
+}
+.kr .m {
+  font-size: 12px;
+  color: var(--sub);
+}
+.kr .sm {
+  flex: none;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font: 700 12.5px var(--head);
+  color: var(--sub);
+  background: var(--card);
+}
+.kr .sm.on {
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+dialog.ui input.big {
+  margin-top: 4px;
+}
+dialog.ui .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 2px;
+}
+dialog.ui .chips button {
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font: 700 14px var(--head);
+  color: var(--sub);
+}
+dialog.ui .chips button.on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+dialog.ui .chips button.del {
+  background: var(--card);
+  border-color: var(--acc);
+  color: var(--acc-d);
+  text-decoration: line-through;
+}
+:root[data-theme="dark"] dialog.ui .chips button.on {
+  color: #16302d;
+}
+dialog.ui .src {
+  font-size: 12.5px;
+  color: var(--sub);
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+dialog.ui .src a {
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: none;
+}
+dialog.ui .src:empty {
+  display: none;
+}
+dialog.ui .note {
+  font-size: 12.5px;
+  color: var(--sub);
+  margin: 0 0 6px;
+}
+dialog.ui .dhq {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+dialog.ui .q,
+.ksort {
+  flex: none;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  font: 700 13px var(--head);
+  color: var(--sub);
+}
+dialog.ui .q {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+dialog.ui .r {
+  margin-top: 14px;
+}
+.khd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 14px 0 10px;
+}
+.khlp {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  font: 800 16px var(--head);
+  color: var(--sub);
+  padding: 0;
+}
+.khlp.on {
+  background: var(--teal-soft);
+  border-color: transparent;
+  color: var(--ink);
+}
+.khelp {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.khd h2 {
+  margin: 0;
+}
+.kbtn {
+  gap: 6px;
+}
+.kr {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.kr.sel {
+  cursor: pointer;
+}
+details.karc {
+  margin-top: 14px;
+}
+details.karc summary {
+  font: 700 13.5px var(--head);
+  color: var(--sub);
+  cursor: pointer;
+  padding: 6px 2px;
+}
+details.karc .kr .tx {
+  opacity: 0.75;
+}
+.kr.pk {
+  background: var(--teal-soft);
+  margin: 0 -14px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.kr .ck {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 800 15px var(--head);
+  color: var(--teal);
+}
+.kr.pk .ck {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+#kbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  background: var(--card);
+  border-top: 1.5px solid var(--line);
+  padding: 10px max(16px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06);
+}
+#kbar .kr1,
+#kbar .kr2 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+#kbar .kn {
+  flex: 1;
+  font: 700 14px var(--head);
+  color: var(--sub);
+}
+#kbar button {
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: 700 13.5px var(--head);
+  color: var(--ink);
+  white-space: nowrap;
+}
+#kbar .kr2 button {
+  flex: 1;
+  padding: 11px 8px;
+}
+#kbar button.on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] #kbar button.on,
+:root[data-theme="dark"] .kr.pk .ck {
+  color: #16302d;
+}
+body:has(#kbar) main {
+  padding-bottom: 130px;
+}
+.ksort {
+  display: grid;
+  padding: 5px 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+.ksort span {
+  grid-area: 1/1;
+}
+.ksort span.off {
+  visibility: hidden;
+}
+.kbtn {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  min-width: 0;
+} /* 2 つの ボタンは 同じ幅(長いほうに そろう) */
+dialog.ui .or {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mute);
+  font-size: 12.5px;
+  margin: 14px 0 8px;
+}
+dialog.ui .or::before,
+dialog.ui .or::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+dialog.ui .file {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 10px;
+  font: 700 14.5px var(--head);
+  color: var(--ink);
+}
+.sites a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+.sites a:last-child {
+  border-bottom: 0;
+}
+.sites .tx {
+  flex: 1;
+  min-width: 0;
+}
+.sites .n {
+  font: 700 15px var(--head);
+}
+.sites .m {
+  font-size: 12px;
+  color: var(--sub);
+}
+.sites .tag {
+  flex: none;
+  font: 700 11.5px var(--head);
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: var(--teal-soft);
+  color: var(--ink);
+}
+.sites .tag.f {
+  background: var(--gold-soft);
+}
+.sites .go {
+  flex: none;
+  color: var(--mute);
+}
+</style>
+</head>
+<body>
+<main id="m"></main>
+<input type="file" id="pick" accept="audio/*,.mp3,.m4a,.ogg,.wav,.flac" multiple hidden>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script src="bgm.js"></script>
+<script>
+// 🎵 きょく: タイマー(と ほかのアプリ)で流す曲を 入れる・名前を変える・けす・ためしに聞く・はじめに流す曲(★)を決める。apps/bgm.py・web/bgm.js
+const {$, el} = G;
+let playing = null,
+  busy = false,
+  picked = null,
+  arcOpen = false,
+  helpOpen = false; // picked: 長押しで えらんでいる曲の id(Set)。null = ふつう
+async function post(body) {
+  const r = await fetch("api/bgm", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "できませんでした");
+  return j;
+}
+// ならび: 押すたびに 入れた順 → なまえ → きぶん(しずか → 上げる)→ 長さ。この端末で 覚える
+const SK = "gojiai-kyoku-sort",
+  mo = t => (t.mood && t.mood.length ? t.mood[0] : 9);
+const SORTS = [
+  ["ts", "入れた順", a => a],
+  ["n", "なまえ", a => [...a].sort((x, y) => x.n.localeCompare(y.n, "ja"))],
+  ["mood", "きぶん", a => [...a].sort((x, y) => mo(x) - mo(y))],
+  ["dur", "長さ", a => [...a].sort((x, y) => (x.dur || 0) - (y.dur || 0))],
+];
+function sortKey() {
+  try {
+    return localStorage.getItem(SK) || "ts";
+  } catch (e) {
+    return "ts";
+  }
+}
+function setSort(k) {
+  try {
+    localStorage.setItem(SK, k);
+  } catch (e) {}
+}
+function draw() {
+  const m = $("m");
+  m.textContent = "";
+  const D = BGM.data,
+    box = el("div", "box");
+  box.style.padding = "2px 14px";
+  const so = SORTS.find(x => x[0] === sortKey()) || SORTS[0],
+    [hd, ...rest] = BGM.tracks(); // ひだまり は いつも 上
+  for (const t of [hd, ...so[2](rest)]) {
+    const r = el("div", "kr"),
+      pl = el("button", "pl", playing === t.id ? "⏸" : "▶"),
+      tx = el("div", "tx");
+    pl.setAttribute("aria-label", playing === t.id ? "とめる" : "ためしに聞く");
+    pl.onclick = () => {
+      if (playing === t.id) {
+        BGM.stop();
+        playing = null;
+      } else {
+        BGM.play(t.id);
+        playing = t.id;
+      }
+      draw();
+    };
+    tx.append(
+      el("div", "n", t.n),
+      el("div", "m", t.id === "hidamari" ? (t.use && t.use.length ? when(t) : "はじめから入っている やさしい和音 ・ 合う曲が ないとき") : when(t)),
+    );
+    const first = (D.first || "hidamari") === t.id,
+      st = el("button", "sm" + (first ? " on" : ""), first ? "★ はじめに" : "☆");
+    st.setAttribute("aria-label", "はじめに 流す曲にする");
+    st.onclick = async () => {
+      if (first) return;
+      try {
+        Object.assign(D, await post({first: t.id}));
+        G.toast("はじめに 流す曲にしました");
+        draw();
+      } catch (e) {
+        G.toast(e.message);
+      }
+    };
+    r.append(pl, tx, st);
+    tx.onclick = () => setDlg(t); // ひだまり も せってい できる(けせない)
+    if (t.id !== "hidamari") {
+      const dl = el("button", "sm", "📦");
+      dl.setAttribute("aria-label", "しまう");
+      dl.onclick = () => arc([t.id], true);
+      r.append(dl);
+    }
+    if (picked) {
+      // えらんでいる間: 押すと えらぶ・外す。右に ✓
+      r.classList.add("sel");
+      r.classList.toggle("pk", picked.has(t.id));
+      st.hidden = true;
+      r.querySelectorAll(".sm").forEach(b => (b.hidden = true));
+      r.append(el("span", "ck", picked.has(t.id) ? "✓" : ""));
+      tx.onclick = r.onclick = ev => {
+        if (ev.target.closest(".pl")) return;
+        picked.has(t.id) ? picked.delete(t.id) : picked.add(t.id);
+        if (!picked.size) picked = null;
+        draw();
+      };
+    } else
+      longPress(r, () => {
+        picked = new Set([t.id]);
+        draw();
+      });
+    box.append(r);
+  }
+  const head = el("div", "khd"),
+    sb = stackBtn(
+      SORTS.map(x => `↕ ${x[1]}`),
+      SORTS.indexOf(so),
+    ),
+    nb = stackBtn(["🔊 音量調整 ON", "🔈 音量調整 OFF"], D.norm !== false ? 0 : 1),
+    hb = el("div", "kbtn");
+  nb.setAttribute("aria-label", "音の大きさを そろえる");
+  nb.onclick = async () => {
+    try {
+      Object.assign(D, await post({norm: D.norm === false}));
+      await BGM.load();
+      G.toast(D.norm !== false ? "音の大きさを そろえて 流します" : "曲の もとの 大きさで 流します");
+      draw();
+    } catch (e) {
+      G.toast(e.message);
+    }
+  };
+  const [qb, qt] = HK_help();
+  hb.append(nb, sb);
+  head.append(qb, hb); // 見出しは 出さない(上の帯に「きょく」)。左に ？、右に 🔊・↕
+  sb.setAttribute("aria-label", "ならびを かえる");
+  sb.onclick = () => {
+    setSort(SORTS[(SORTS.indexOf(so) + 1) % SORTS.length][0]);
+    draw();
+  };
+  m.append(head, qt, box);
+  const ar = D.songs.filter(t => t.arc); // 📦 しまった曲: たたんで 下に。もどす・けす(けすは たしかめる)
+  if (ar.length) {
+    const dt = el("details", "karc"),
+      sm = el("summary", null, `📦 しまった曲(${ar.length})`),
+      ab = el("div", "box");
+    ab.style.padding = "2px 14px";
+    dt.open = arcOpen;
+    dt.ontoggle = () => {
+      arcOpen = dt.open;
+    };
+    for (const t of ar) {
+      const r = el("div", "kr"),
+        tx = el("div", "tx"),
+        bk = el("button", "sm", "↩ もどす"),
+        dl = el("button", "sm", "🗑");
+      tx.append(el("div", "n", t.n), el("div", "m", when(t)));
+      bk.onclick = () => arc([t.id], false);
+      dl.setAttribute("aria-label", "けす");
+      dl.onclick = () => delDlg(t);
+      r.append(tx, bk, dl);
+      ab.append(r);
+    }
+    dt.append(sm, ab);
+    m.append(dt);
+  }
+  m.append(el("h2", null, "🔗 フリーの曲を さがす"), sites());
+  let fab = $("fab");
+  if (!fab) {
+    fab = el("button", null, "＋");
+    fab.id = "fab";
+    fab.setAttribute("aria-label", "曲を入れる");
+    document.body.append(fab);
+  }
+  fab.onclick = () => {
+    if (!busy) addDlg();
+  };
+  fab.hidden = !!picked;
+  bar();
+}
+async function arc(ids, on) {
+  // 📦 しまう / ↩ もどす(ファイルは のこす。しまった曲は タイマーで 流さない)
+  try {
+    for (const id of ids) {
+      if (on && playing === id) {
+        BGM.stop();
+        playing = null;
+      }
+      await post({arc: id, on});
+    }
+    await BGM.load();
+    picked = null;
+    G.toast(on ? `${ids.length > 1 ? ids.length + " 曲 " : ""}しまいました(下の 📦 から もどせます)` : "もどしました");
+    draw();
+  } catch (e) {
+    G.toast(e.message);
+  }
+}
+function stackBtn(labels, k) {
+  // 字を ぜんぶ 重ねて置き、いまの 1 つだけ 見せる → 幅は いちばん長い字。押して 字が かわっても 動かない・はみ出さない
+  const b = el("button", "ksort");
+  labels.forEach((t, i) => {
+    const sp = el("span", i === k ? "" : "off", t);
+    if (i !== k) sp.setAttribute("aria-hidden", "true");
+    b.append(sp);
+  });
+  return b;
+}
+function longPress(r, fn) {
+  // 0.45 秒 押したままで fn。動かしたら(スクロール)やめる。ボタンの上からは しない
+  let tm = null,
+    x0 = 0,
+    y0 = 0,
+    fired = false;
+  r.addEventListener("pointerdown", ev => {
+    if (ev.target.closest("button")) return;
+    fired = false;
+    x0 = ev.clientX;
+    y0 = ev.clientY;
+    tm = setTimeout(() => {
+      fired = true;
+      tm = null;
+      if (navigator.vibrate) navigator.vibrate(15);
+      fn();
+    }, 450);
+  });
+  const stop = () => {
+    clearTimeout(tm);
+    tm = null;
+  };
+  r.addEventListener("pointermove", ev => {
+    if (tm && Math.hypot(ev.clientX - x0, ev.clientY - y0) > 10) stop();
+  });
+  r.addEventListener("pointerup", stop);
+  r.addEventListener("pointercancel", stop);
+  r.addEventListener(
+    "click",
+    ev => {
+      if (fired) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        fired = false;
+      }
+    },
+    true,
+  ); // 長押しの あとの クリックで せっていを 開かない
+  r.addEventListener("contextmenu", ev => ev.preventDefault());
+}
+function bar() {
+  // えらんでいる間の 下の バー: まとめて きめる・✨ きぶんを 自動で・ぜんぶ・やめる
+  let b = $("kbar");
+  if (b) b.remove();
+  if (!picked) return;
+  b = el("div");
+  b.id = "kbar";
+  const all = BGM.tracks().map(t => t.id),
+    n = el("div", "kn", `${picked.size} 曲 えらんでいます`);
+  const ed = el("button", "on", "✏️ まとめて きめる"),
+    au = el("button", null, "✨ きぶんを 自動で"),
+    al = el("button", null, picked.size === all.length ? "ぜんぶ 外す" : "ぜんぶ"),
+    no = el("button", null, "やめる");
+  ed.onclick = () => bulkDlg([...picked]);
+  au.onclick = () => autoMood([...picked].filter(id => id !== "hidamari"));
+  al.onclick = () => {
+    picked = picked.size === all.length ? null : new Set(all);
+    draw();
+  };
+  no.onclick = () => {
+    picked = null;
+    draw();
+  };
+  const ac = el("button", null, "📦 しまう");
+  ac.onclick = () => {
+    const ids = [...picked].filter(id => id !== "hidamari");
+    if (ids.length) arc(ids, true);
+    else G.toast("ひだまり は しまえません");
+  };
+  const r1 = el("div", "kr1"),
+    r2 = el("div", "kr2");
+  r1.append(n, al, no);
+  r2.append(ed, au, ac);
+  b.append(r1, r2);
+  document.body.append(b);
+}
+async function autoMood(ids) {
+  // ✨ 音から おしはかって きぶんを 付け直す(1 曲 20〜30 秒。うしろで。終わったら 一覧が 変わる)
+  if (!ids.length) {
+    G.toast("ひだまり は 音の ファイルが ないので しらべられません");
+    return;
+  }
+  try {
+    await post({auto: ids});
+  } catch (e) {
+    G.toast(e.message);
+    return;
+  }
+  picked = null;
+  draw();
+  G.toast(`${ids.length} 曲の きぶんを しらべています…(しばらく かかります)`);
+  const at = id => {
+      const s = BGM.data.songs.find(x => x.id === id);
+      return s && s.auto ? s.auto.at : null;
+    },
+    before = Object.fromEntries(ids.map(id => [id, at(id)]));
+  for (let i = 0; i < ids.length * 4 + 6; i++) {
+    // 10 秒ごとに 見て、ぜんぶ しらべ終わったら おわり
+    await new Promise(r => setTimeout(r, 10000));
+    await BGM.load();
+    if (!document.querySelector("dialog[open]")) draw();
+    if (ids.every(id => at(id) && at(id) !== before[id])) break;
+  }
+  G.toast("きぶんを 付けました");
+}
+function bulkDlg(ids) {
+  // ✏️ まとめて: どのタイマー・どういうとき は 押すたびに ＋ 足す → − 外す → さわらない(いまの 印は のこる)。きぶん は 1 つ えらぶと ぜんぶ それに
+  const dlg = el("dialog", "ui"),
+    f = el("form"),
+    act = {use: new Map(), lv: new Map()};
+  let mood = null;
+  const tri = (key, list) => {
+    const c = el("div", "chips");
+    for (const [v, e, n] of list) {
+      const b = el("button", "", `${e} ${n}`);
+      b.type = "button";
+      b.onclick = () => {
+        const k = act[key].get(v),
+          nx = k === "add" ? "del" : k === "del" ? null : "add";
+        nx ? act[key].set(v, nx) : act[key].delete(v);
+        b.className = nx === "add" ? "on" : nx === "del" ? "del" : "";
+        b.textContent = (nx === "add" ? "＋ " : nx === "del" ? "− " : "") + `${e} ${n}`;
+      };
+      c.append(b);
+    }
+    return c;
+  };
+  const mc = el("div", "chips");
+  for (const [v, e, n] of MOODS) {
+    const b = el("button", "", `${e} ${n}`);
+    b.type = "button";
+    b.onclick = () => {
+      mood = mood === v ? null : v;
+      mc.querySelectorAll("button").forEach((x, i) => x.classList.toggle("on", MOODS[i][0] === mood));
+    };
+    mc.append(b);
+  }
+  const ok = el("button", "ok", "まとめて きめる"),
+    no = el("button", "no", "やめる"),
+    acts = el("div", "r");
+  no.type = "button";
+  no.onclick = () => dlg.close();
+  f.onsubmit = async ev => {
+    ev.preventDefault();
+    if (!act.use.size && !act.lv.size && mood === null) {
+      dlg.close();
+      return;
+    }
+    ok.disabled = true;
+    const ts = BGM.tracks(),
+      order = {use: USE.map(x => x[0]), lv: LVS.map(x => x[0])};
+    try {
+      for (const id of ids) {
+        const t = ts.find(x => x.id === id);
+        if (!t) continue;
+        const body = {rename: id};
+        for (const k of ["use", "lv"]) {
+          if (!act[k].size) continue;
+          const cur = new Set(t[k] || []);
+          for (const [v, a] of act[k]) a === "add" ? cur.add(v) : cur.delete(v);
+          body[k] = order[k].filter(v => cur.has(v));
+        }
+        if (mood !== null) body.mood = [mood];
+        await post(body);
+      }
+      await BGM.load();
+      dlg.close();
+      picked = null;
+      G.toast(`${ids.length} 曲 きめました`);
+      draw();
+    } catch (e) {
+      ok.disabled = false;
+      G.toast(e.message);
+    }
+  };
+  acts.append(no, ok);
+  f.append(
+    el("div", "dh", `${ids.length} 曲を まとめて`),
+    el("div", "note", "押すたびに ＋ 足す → − 外す → さわらない。いまの 印は のこります。きぶん は えらぶと ぜんぶ それに"),
+    el("div", "lb", "どのタイマーで 流す"),
+    tri("use", USE),
+    el("div", "lb", "どういうとき"),
+    tri("lv", LVS),
+    el("div", "lb", "きぶん(1 つ)"),
+    mc,
+    acts,
+  );
+  dlg.append(f);
+  dlg.onclose = () => dlg.remove();
+  document.body.append(dlg);
+  dlg.showModal();
+}
+// フリーの曲の サイト。url = 曲の ページの URL を はると 入る。file = ダウンロードして「ファイルから」
+const SITES = [
+  {n: "魔王魂", u: "https://maou.audio/", m: "ピアノ・アコースティック・ヒーリング など", k: "url"},
+  {n: "甘茶の音楽工房", u: "https://amachamusic.chagasi.com/", m: "やさしい ピアノ・オルゴール", k: "url"},
+  {n: "BGMer", u: "https://bgmer.net/", m: "ゆったり・カフェ・ヒーリング", k: "url"},
+  {n: "OpenTracks(旧 DOVA)", u: "https://opentracks.com/bgm", m: "曲が とても多い。ダウンロードは サイトの ボタンから", k: "file"},
+  {n: "OtoLogic", u: "https://otologic.jp/free/bgm/", m: "ヒーリング・環境音", k: "file"},
+  {n: "Pixabay Music", u: "https://pixabay.com/music/", m: "ローファイ・アンビエント(英語のサイト)", k: "file"},
+];
+function sites() {
+  const box = el("div", "box sites");
+  box.style.padding = "2px 14px";
+  for (const x of SITES) {
+    const a = el("a"),
+      tx = el("div", "tx");
+    a.href = x.u;
+    a.target = "_blank";
+    a.rel = "noopener";
+    tx.append(el("div", "n", x.n), el("div", "m", x.m));
+    a.append(tx, el("span", "tag" + (x.k === "url" ? "" : " f"), x.k === "url" ? "URL で入る" : "ファイルで"), el("span", "go", "↗"));
+    box.append(a);
+  }
+  return box;
+}
+function addDlg() {
+  // ＋: 曲の ページ(か ファイル)の URL を はる / ファイルから えらぶ
+  const dlg = el("dialog", "ui"),
+    f = el("form"),
+    inp = el("input", "big");
+  inp.type = "url";
+  inp.placeholder = "https://…";
+  inp.inputMode = "url";
+  inp.autocomplete = "off";
+  const ok = el("button", "ok", "入れる"),
+    no = el("button", "no", "やめる"),
+    acts = el("div", "r");
+  no.type = "button";
+  no.onclick = () => dlg.close();
+  const fb = el("button", "file", "📁 ファイルから えらぶ");
+  fb.type = "button";
+  fb.onclick = () => {
+    dlg.close();
+    $("pick").click();
+  };
+  f.onsubmit = async ev => {
+    ev.preventDefault();
+    const u = inp.value.trim();
+    if (!u) {
+      inp.focus();
+      return;
+    }
+    ok.disabled = true;
+    busy = true;
+    G.toast("取ってきています…");
+    try {
+      const j = await post({url: u});
+      await BGM.load();
+      dlg.close();
+      const t = j.songs.find(s => s.id === j.added);
+      G.toast(`「${(t ? t.n : "曲").slice(0, 20)}」を 入れました`);
+      draw();
+    } catch (e) {
+      ok.disabled = false;
+      G.toast(e.message);
+    }
+    busy = false;
+  };
+  acts.append(no, ok);
+  f.append(
+    el("div", "dh", "曲を いれる"),
+    el("div", "sub", "曲の ページか ファイルの URL を はってね(魔王魂・甘茶の音楽工房・BGMer など)"),
+    inp,
+    acts,
+    el("div", "or", "または"),
+    fb,
+  );
+  dlg.append(f);
+  dlg.onclose = () => dlg.remove();
+  document.body.append(dlg);
+  dlg.showModal();
+}
+function HK_help() {
+  // 左上の ？: 押すと つかいかた を 出す・しまう(描き直しても 覚えている)
+  const hb = el("button", "khlp", "？"),
+    ht = el("div", "sub khelp");
+  ht.innerHTML = [
+    "＋ で 曲の ページの URL(「URL で入る」の サイト)か ファイルを 入れる。入れた曲は 🎵 1曲ぶん に入り、きぶん は 音から おしはかって 付きます",
+    "名前を押すと せってい: どのタイマーで・どういうとき(🌙 ☁️ ☀️ = いまの げんき)・きぶん(1 🫧 〜 5 🔥 = ⏱️ タイマー の きょうの きぶん)",
+    "長押しで えらぶ → 下の バーで まとめて きめる・きぶんを 自動で・📦 しまう",
+    "📦 しまった曲は 下に。もどす か けす。★ の曲が タイマーで はじめに 流れます",
+    "🔊 音量調整 ON で 曲ごとの 音の大きさを そろえます。曲は この PC の中だけ。使う前に その サイトの 決まりを 見てね",
+    "🖥️ 長さ・音量調整 には PC に ffmpeg、きぶんの 自動 には librosa が 要ります(無いと その 2 つだけ 出ません。入れかたは docs/setup.md)",
+  ]
+    .map(x => "・" + x)
+    .join("<br>");
+  ht.hidden = !helpOpen;
+  hb.classList.toggle("on", helpOpen);
+  hb.setAttribute("aria-label", "つかいかた");
+  hb.onclick = () => {
+    helpOpen = !helpOpen;
+    ht.hidden = !helpOpen;
+    hb.classList.toggle("on", helpOpen);
+  };
+  return [hb, ht];
+}
+// どのタイマーで・どういうとき(タイマーを えらばないと 流さない。どういうとき を えらばないと いつでも)。ひといき の タイマーは これに 合う曲から 流す
+const USE = [
+  ["brush", "🪥", "歯みがき"],
+  ["yoga", "🧘", "ヨガ"],
+  ["breath", "🌬️", "呼吸"],
+  ["song", "🎵", "1曲ぶん"],
+];
+const LVS = [
+  [0, "🌙", "ぐったり"],
+  [1, "☁️", "ふつう"],
+  [2, "☀️", "げんき"],
+];
+const MOODS = [
+  [1, "🫧", "1 しずかに"],
+  [2, "🌿", "2 落ち着く"],
+  [3, "🍃", "3 ふつう"],
+  [4, "🌤️", "4 ちょっと上げる"],
+  [5, "🔥", "5 テンション上げる"],
+]; // ⏱️ タイマー と同じ
+function when(t) {
+  // 一覧の 2 行目: 長さ ・ どのタイマー ・ どういうとき
+  const u = USE.filter(x => (t.use || []).includes(x[0]))
+      .map(x => x[1])
+      .join(""),
+    l =
+      LVS.filter(x => (t.lv || []).includes(x[0]))
+        .map(x => x[1])
+        .join("") +
+      MOODS.filter(x => (t.mood || []).includes(x[0]))
+        .map(x => x[1])
+        .join("");
+  const len = t.dur ? `${Math.floor(t.dur / 60)}:${String(t.dur % 60).padStart(2, "0")}` : "";
+  return [len, u ? `${u} ・ ${l || "いつでも"}` : "タイマーでは 流さない"].filter(Boolean).join(" ・ ");
+}
+function setDlg(t) {
+  // 曲の せってい: 名前・どのタイマーで・どういうとき
+  const dlg = el("dialog", "ui"),
+    f = el("form"),
+    inp = el("input", "big");
+  inp.value = t.n;
+  inp.maxLength = 60;
+  const sel = {use: new Set(t.use || []), lv: new Set(t.lv || []), mood: new Set(t.mood || [])};
+  if (sel.mood.size > 1) sel.mood = new Set([[...sel.mood][0]]); // きぶん は 1 つだけ(前に 2 つ 付けた曲は はじめの 1 つ)
+  const chips = (key, list, one) => {
+    // one: 1 つだけ えらぶ(もう一度 押すと 外す)
+    const c = el("div", "chips");
+    for (const [v, e, n] of list) {
+      const b = el("button", sel[key].has(v) ? "on" : "", `${e} ${n}`);
+      b.type = "button";
+      b.onclick = () => {
+        const had = sel[key].has(v);
+        if (one) sel[key].clear();
+        had ? sel[key].delete(v) : sel[key].add(v);
+        c.querySelectorAll("button").forEach((x, i) => x.classList.toggle("on", sel[key].has(list[i][0])));
+      };
+      c.append(b);
+    }
+    return c;
+  };
+  const ok = el("button", "ok", "きめる"),
+    no = el("button", "no", "やめる"),
+    acts = el("div", "r");
+  no.type = "button";
+  no.onclick = () => dlg.close();
+  f.onsubmit = async ev => {
+    ev.preventDefault();
+    ok.disabled = true;
+    try {
+      Object.assign(BGM.data, await post({rename: t.id, n: inp.value, use: [...sel.use], lv: [...sel.lv], mood: [...sel.mood]}));
+      await BGM.load();
+      dlg.close();
+      G.toast("きめました");
+      draw();
+    } catch (e) {
+      ok.disabled = false;
+      G.toast(e.message);
+    }
+  };
+  acts.append(no, ok);
+  const dh = el("div", "dh dhq", "曲の せってい"),
+    q = el("button", "q", "？"),
+    note = el(
+      "div",
+      "note",
+      "タイマーを えらばないと 流しません。どういうとき・きぶん は えらばないと いつでも。きぶん は 入れたとき 音から おしはかって 付けます(ちがったら 直してね)",
+    );
+  q.type = "button";
+  q.setAttribute("aria-label", "せつめい");
+  note.hidden = true;
+  q.onclick = () => {
+    note.hidden = !note.hidden;
+  };
+  dh.append(q);
+  const src = el("div", "src");
+  if (t.src) {
+    const a = el("a", null, "🔗 もとのページを ひらく ↗");
+    a.href = t.src;
+    a.target = "_blank";
+    a.rel = "noopener";
+    src.append(a);
+  }
+  if (t.id === "hidamari") src.append(el("span", null, "その場で作る 和音。タイマーを えらばないと、合う曲が ないときに 流れます"));
+  f.append(
+    dh,
+    note,
+    el("div", "lb", "なまえ"),
+    inp,
+    src,
+    el("div", "lb", "どのタイマーで 流す"),
+    chips("use", USE),
+    el("div", "lb", "どういうとき(いくつでも)"),
+    chips("lv", LVS),
+    el("div", "lb", "きぶん(1 つ)"),
+    chips("mood", MOODS, true),
+    acts,
+  );
+  dlg.append(f);
+  dlg.onclose = () => dlg.remove();
+  document.body.append(dlg);
+  dlg.showModal();
+}
+function delDlg(t) {
+  // 曲のファイルごと けすので、押す前に 1 回 たしかめる
+  const dlg = el("dialog", "ui"),
+    ok = el("button", "ok", "けす"),
+    no = el("button", "no", "やめる"),
+    acts = el("div", "r");
+  no.onclick = () => dlg.close();
+  ok.onclick = async () => {
+    ok.disabled = true;
+    try {
+      if (playing === t.id) {
+        BGM.stop();
+        playing = null;
+      }
+      await post({del: t.id});
+      await BGM.load();
+      dlg.close();
+      G.toast("けしました");
+      draw();
+    } catch (e) {
+      ok.disabled = false;
+      G.toast(e.message);
+    }
+  };
+  acts.append(no, ok);
+  dlg.append(
+    el("div", "dh", `「${t.n.slice(0, 20)}」を けしますか?`),
+    el("div", "sub", "曲のファイルも けします。もとに もどせません。もう一度 使うときは 入れ直してね。"),
+    acts,
+  );
+  dlg.onclose = () => dlg.remove();
+  document.body.append(dlg);
+  dlg.showModal();
+}
+$("pick").onchange = async () => {
+  const fs = [...$("pick").files];
+  $("pick").value = "";
+  if (!fs.length) return;
+  busy = true;
+  let ok = 0;
+  for (const [i, f] of fs.entries()) {
+    G.toast(fs.length > 1 ? `入れています… ${i + 1}/${fs.length}` : "入れています…");
+    try {
+      if (f.size > 30e6) throw new Error("30MB までの 曲にしてね");
+      const r = await fetch("api/bgm", {
+        method: "POST",
+        headers: {"Content-Type": f.type || "audio/mpeg", "X-Name": encodeURIComponent(f.name)},
+        body: f,
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || "入れられませんでした");
+      ok++;
+    } catch (e) {
+      G.toast(`${f.name.slice(0, 16)}: ${e.message}`);
+      await new Promise(r => setTimeout(r, 1800));
+    }
+  }
+  busy = false;
+  await BGM.load();
+  draw();
+  if (ok) G.toast(`${ok} 曲 入れました`);
+};
+addEventListener("pagehide", () => BGM.stop());
+G.start("hitoiki-kyoku", () => {})
+  .then(() => BGM.load())
+  .then(draw);
+G.gear(); // ⚙️ せってい を 帯の 右に
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>ひといき</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="hitoiki.css">
+</head>
+<body>
+<main id="m"></main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script src="bgm.js"></script>
+<script src="hitoiki.js"></script>
+<script src="hitoiki-koe.js"></script>
+<script>
+// 🍵 いま: 息抜きを 1 つだけ。「べつのに」で つぎ、「いまはいい」で 引っこむ(何も残さない)
+const {$, el} = G;
+let i = 0,
+  rest = false;
+function draw() {
+  const m = $("m");
+  m.textContent = "";
+  if (!HK.D) {
+    m.append(el("div", "empty", "つながりませんでした。Tailscale を見てください"));
+    return;
+  }
+  const gk = HK.genkiBtn(() => {
+      i = 0;
+      rest = false;
+      draw();
+    }),
+    top = el("div", "itop"); // げんき の 3 つ と 🗣️ 読み上げ(右上)を 同じ 行・同じ 高さに
+  top.append(gk.querySelector(".gseg"));
+  if (window.KOE) top.append(KOE.bar(true));
+  gk.prepend(top);
+  m.append(gk);
+  if (rest) {
+    const r = el("div", "rest"),
+      a = el("button", "lnk", "もう1つだけ 見る");
+    r.append(el("div", "ic", "🍃"), el("div", null, "また あとで。"), a);
+    a.onclick = () => {
+      rest = false;
+      i++;
+      draw();
+    };
+    m.append(r);
+    return;
+  }
+  const L = HK.deck(),
+    p = L[i % L.length],
+    c = el("div", "sug");
+  c.append(el("div", "ic", p.ic), el("div", "t", p.t), el("div", "s", p.s));
+  if (p.from) c.append(el("div", "from", p.from));
+  let go;
+  if (p.item && p.item.url) {
+    go = el("a", "hk-go", HK.goLabel(p.item.url, true));
+    go.href = p.item.url;
+    go.target = "_blank";
+    go.rel = "noopener";
+    go.onclick = () => HK.send({seen: p.item.id});
+  } else {
+    go = el("button", "hk-go", p.go === "walk" ? "いってきます" : p.item ? "たな で 見る" : "やってみる");
+    go.onclick = () => act(p);
+  }
+  const r = el("div", "row2"),
+    nx = el("button", "soft", "べつのに"),
+    no = el("button", "soft", "いまはいい");
+  nx.onclick = () => {
+    c.classList.add("out");
+    setTimeout(() => {
+      i++;
+      draw();
+    }, 260);
+  };
+  no.onclick = () => {
+    rest = true;
+    draw();
+  };
+  r.append(nx, no);
+  c.append(go, r);
+  m.append(c);
+  if (!HK.D.items.length) m.append(el("div", "hint", "📚 たな に 好きなものを入れると、ここにも ときどき出ます"));
+  HK.help(
+    m,
+    "その日の げんき に合わせて、息抜きを 1つだけ出します。げんき は からだ の「いまの からだ」か ゆうべの ねむり から決めます。ちがうときは 押すと その日だけ 変わります。やったかどうかは 残しません。",
+  );
+}
+function act(p) {
+  if (p.item) {
+    location.href = "hitoiki-tana.html#" + p.item.id;
+    return;
+  }
+  if (HK.TM[p.go]) {
+    HK.startTimer(p.go);
+    return;
+  }
+  const m = $("m");
+  m.textContent = "";
+  const r = el("div", "rest"),
+    a = el("button", "lnk", "もどる");
+  r.append(el("div", "ic", "🚶"), el("div", "done", "いってらっしゃい"), el("div", null, "帰ってきたら 水を1杯。"), a);
+  a.onclick = () => {
+    i++;
+    draw();
+  };
+  m.append(r);
+}
+G.start("hitoiki", () => {})
+  .then(() => HK.load())
+  .then(draw);
+G.gear(); // ⚙️ せってい を 帯の 右に
+</script>
+</body>
+</html>

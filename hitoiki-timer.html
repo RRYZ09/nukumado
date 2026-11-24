@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>タイマー — ひといき</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<link rel="stylesheet" href="hitoiki.css">
+<style>
+.tl .hd {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tl .two.wrap3 {
+  flex-wrap: wrap;
+}
+.tl .two.wrap3 button:nth-child(3) {
+  flex-basis: 100%;
+  background: var(--teal-soft);
+  color: var(--ink);
+}
+</style>
+</head>
+<body>
+<main id="m"></main>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script src="bgm.js"></script>
+<script src="hitoiki.js"></script>
+<script src="hitoiki-koe.js"></script>
+<script>
+// ⏱️ タイマー: 歯みがき(30 秒ごとに場所)・ヨガ・呼吸・1曲・遠くを見る。🎵 は その場で作る音。回数は数えない
+const {$, el} = G;
+function draw() {
+  const m = $("m");
+  m.textContent = "";
+  const g = el("div", "tgrid");
+  for (const k of HK.TORDER) {
+    const t = HK.TM[k];
+    if (k === "brush") {
+      // 歯みがき は 1 枚で、3分・5分 を押して はじめる
+      const b = el("div", "tl"),
+        two = el("div", "two");
+      for (const [kk, n] of [
+        ["brush", "ささっと"],
+        ["brush5", "じっくり"],
+      ]) {
+        const x = el("button", null, n);
+        x.onclick = () => HK.startTimer(kk);
+        two.append(x);
+      }
+      b.append(el("div", "e", t.e), el("b", null, "歯みがき"), two);
+      g.append(b);
+      continue;
+    }
+    const COURSE = {
+      yoga5: [
+        "🧘",
+        "床ヨガ",
+        [
+          ["yoga5", "首・肩"],
+          ["yuka", "足・こし"],
+          ["yukaAll", "ぜんぶ"],
+        ],
+      ],
+      isu: [
+        "🪑",
+        "いすヨガ",
+        [
+          ["isu", "全身"],
+          ["katakori", "肩こり"],
+        ],
+      ],
+    }[k];
+    if (COURSE) {
+      // ヨガ は 場所の カード 1 枚に、コースの ボタン
+      const b = el("div", "tl"),
+        two = el("div", "two");
+      for (const [kk, n] of COURSE[2]) {
+        const x = el("button", null, n);
+        x.onclick = () => HK.startTimer(kk);
+        two.append(x);
+      }
+      const hd = el("div", "hd");
+      hd.append(el("b", null, COURSE[1]), el("span", null, "5分・🎵"));
+      b.append(el("div", "e", COURSE[0]), hd, two);
+      if (COURSE[2].length > 2) two.classList.add("wrap3");
+      g.append(b);
+      continue; // 名前の 右に 5分・🎵(1 行)
+    }
+    if (k === "meiso") {
+      // 🪷 瞑想 は 3分・5分 を押して はじめる
+      const b = el("div", "tl"),
+        two = el("div", "two");
+      for (const [kk, n] of [
+        ["meiso3", "3分"],
+        ["meiso", "5分"],
+      ]) {
+        const x = el("button", null, n);
+        x.onclick = () => HK.startTimer(kk);
+        two.append(x);
+      }
+      const hd = el("div", "hd");
+      hd.append(el("b", null, "瞑想"), el("span", null, "🎵"));
+      b.append(el("div", "e", t.e), hd, two);
+      g.append(b);
+      continue;
+    }
+    if (k === "breath") {
+      // 呼吸 は 音つき・音なし を押して はじめる
+      const b = el("div", "tl"),
+        two = el("div", "two");
+      for (const [on, n] of [
+        [true, "音つき"],
+        [false, "音なし"],
+      ]) {
+        const x = el("button", null, n);
+        x.onclick = () => HK.startTimer(k, on);
+        two.append(x);
+      }
+      const hd = el("div", "hd");
+      hd.append(el("b", null, t.n), el("span", null, t.d));
+      b.append(el("div", "e", t.e), hd, two);
+      g.append(b);
+      continue; // 名前の 右に 1分
+    }
+    const m = t.n.match(/^(.*?)\((.*)\)$/); // 「ゆるヨガ(座りながら)」は かっこの中を 下の小さい字へ
+    const b = el("button", "tl");
+    b.append(el("div", "e", t.e), el("b", null, m ? m[1] : t.n));
+    if (m) b.append(el("span", null, m[2]));
+    b.append(el("span", null, t.d + (t.music ? "・🎵 つき" : "")));
+    b.onclick = () => HK.startTimer(k);
+    g.append(b);
+  }
+  const tl = el("div", "tline");
+  tl.append(moodBtn());
+  if (window.KOE) tl.append(KOE.bar(true)); // 曲の きぶん(左)と 🗣️ 読み上げ(右上。いま と おなじ)を 1 行に
+  m.append(tl, g);
+  HK.help(
+    m,
+    "押すと はじまります。とちゅうで 区切りが変わると ポンと鳴ります。🎵 で やさしい音を 出す・止める。うごいている間は 画面が消えません。おわっても 回数は 数えません。",
+  );
+}
+function moodBtn() {
+  // 🎵 きょうの 曲の きぶん: 5 つの 丸(HK.moodRow)。決めていない日は 落ち着く。その日のあいだ 覚える
+  return HK.moodRow(BGM.mood(), v => BGM.setMood(v), "曲の きぶん");
+}
+G.start("hitoiki-timer", () => {})
+  .then(() => BGM.load())
+  .then(draw);
+G.gear(); // ⚙️ せってい を 帯の 右に
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+ "name": "ぬくまど",
+ "short_name": "ぬくまど",
+ "description": "ぬくまど — じぶんを いたわる ホーム画面(体験版)。記録は この ブラウザの 中だけに 残ります。",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#FBF4E8",
+ "theme_color": "#D97A93",
+ "lang": "ja",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
+  }
+ ]
+}

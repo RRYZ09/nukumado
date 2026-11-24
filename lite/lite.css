@@ -1,0 +1,107 @@
+/* ぬくまど(体験版)だけの 見た目。tools/build_lite.py が common.css の 後に 差しこむ。体験版に 無い ものへの 入口を しまう */
+
+/* 🌸 いま: 「いまいるところ」(部屋の 温度計・さむさ の ページ)は 体験版に 無い */
+a#here {
+  display: none;
+}
+
+/* ⚙️ 入口 の ウィジェット: 出せるのは 🔗 ショートカット だけ(天気・予定・やること・電気・予定を足す・時計の横の天気 は 無い) */
+.gws label.rowl[data-k]:not([data-k="sc"]),
+.gwall > .gwp + .gwp,
+.gwr {
+  display: none;
+}
+
+/* 🎵 きょく: 曲を 足す(＋ と フリーの 曲の サイト)は 体験版に 無い */
+html[data-lite="hitoiki-kyoku"] #fab,
+html[data-lite="hitoiki-kyoku"] h2:has(+ .box.sites),
+html[data-lite="hitoiki-kyoku"] .box.sites {
+  display: none;
+}
+
+/* ⚙️ ひといき: 🎙️ こえ の つなぎ方 と、🫧 からだ から げんき を 決める 切りかえ は 体験版に 無い */
+html[data-lite="hitoiki-settei"] details.how,
+html[data-lite="hitoiki-settei"] h2:has(+ .box > .seg),
+html[data-lite="hitoiki-settei"] .box:has(> .seg) {
+  display: none;
+}
+
+/* ⚙️ の いちばん下「この アプリに ついて」(after.js) */
+.lite-note {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.lite-note h2 {
+  margin: 14px 0 0;
+}
+.lite-note .btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+}
+.lite-fbw summary {
+  font: 700 15px var(--head);
+  color: var(--teal);
+  padding: 8px 0;
+  cursor: pointer;
+}
+.lite-fb {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lite-fb select,
+.lite-fb textarea {
+  font-size: 16px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  box-sizing: border-box;
+  width: 100%;
+}
+.lite-pair {
+  display: flex;
+  gap: 8px;
+}
+.lite-pair .btn {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+.lite-note .lite-fbw {
+  padding: 14px;
+  margin-top: 6px;
+}
+.lite-fbw h3 {
+  margin: 0 0 4px;
+  font: 700 16px var(--head);
+}
+.lite-fbw .sub {
+  margin: 0 0 8px;
+}
+.lite-sec {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lite-sec .sub {
+  margin: 0;
+}
+.lite-sec .btn {
+  margin: 0;
+}
+.lite-sec .sub {
+  white-space: pre-line;
+}
+.lite-note > p.sub {
+  white-space: pre-line;
+  margin: 0;
+}

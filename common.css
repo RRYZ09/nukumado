@@ -1,0 +1,1530 @@
+/* ごじあい: 色と部品。「Claude と話す」・入口ページと同じ紙の色・同じ字。上の帯だけ色を変えている */
+:root {
+  --bg: #fbf4e8;
+  --card: #fffdf8;
+  --ink: #3a322d;
+  --sub: #6e625a;
+  --mute: #9a8d82;
+  --line: #e3d6c2;
+  --acc: #e0674c;
+  --acc-d: #b84e33;
+  --acc-soft: #f6d8cf;
+  --teal: #2e837b;
+  --teal-soft: #d2e7e4;
+  --gold: #c9903a;
+  --gold-soft: #f3e3c6;
+  --cold: #4b7fb0;
+  --cold-soft: #dce8f3;
+  --maru: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", system-ui, sans-serif;
+  --head: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "M PLUS Rounded 1c", sans-serif;
+  --bar: #b84e33;
+  --bar-ink: #fff;
+  --bar-btn: rgba(255, 255, 255, 0.18);
+  --field: #fff;
+}
+:root[data-theme="dark"] {
+  --bg: #25201c;
+  --card: #302a25;
+  --ink: #f3eadb;
+  --sub: #bdaf9f;
+  --mute: #8f8377;
+  --line: #4a4039;
+  --acc: #e0674c;
+  --acc-d: #c9573d;
+  --acc-soft: #5a3226;
+  --teal: #6cc2b8;
+  --teal-soft: #24423f;
+  --gold: #e0b060;
+  --gold-soft: #4a3b22;
+  --cold: #8db8e0;
+  --cold-soft: #2b3a4a;
+  --field: #25201c;
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.65 var(--maru);
+}
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+a {
+  color: inherit;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+}
+.top {
+  background: var(--bar);
+  color: var(--bar-ink);
+  padding: 10px 12px 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.top h1 {
+  font: 700 19px/1.3 var(--head);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top h1 button {
+  background: none;
+  padding: 0;
+  height: auto;
+  min-width: 0;
+  border-radius: 8px;
+  font: inherit;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.top .back {
+  font-size: 22px;
+  padding: 0 0 3px;
+  margin-left: -6px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px 10px;
+  padding-top: 14px;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font: 700 12.5px/1.3 var(--head);
+  color: var(--ink);
+  padding: 0;
+}
+.app .ic {
+  width: 100%;
+  max-width: 76px;
+  aspect-ratio: 1;
+  border-radius: 22%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(58, 50, 45, 0.18);
+}
+.app:active .ic {
+  transform: scale(0.93);
+}
+.app .ic {
+  position: relative;
+}
+.app .ic .dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ffefa0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+} /* 入口の しるし(common.js の dot)。数も動きも付けない */
+.app .ic .dot.e {
+  top: 3px;
+  right: 3px;
+  width: auto;
+  height: auto;
+  padding: 3px;
+  font-size: 14px;
+  line-height: 1;
+  font-style: normal;
+  background: rgba(255, 255, 255, 0.82);
+} /* 絵の しるし(🗑️・🛒) */
+.app .nm {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app.soon .ic {
+  background: none !important;
+  border: 2px dashed var(--line);
+  box-shadow: none;
+  filter: grayscale(0.6);
+  opacity: 0.7;
+}
+.app.soon .nm {
+  color: var(--mute);
+}
+dialog.ui {
+  border: 0;
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--ink);
+  padding: 18px;
+  width: min(92vw, 380px);
+  font: inherit;
+}
+dialog.ui::backdrop {
+  background: rgba(40, 30, 25, 0.45);
+}
+dialog.ui .dh {
+  font: 700 16px var(--head);
+  margin-bottom: 12px;
+}
+dialog.ui .r {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+dialog.ui input:not([type="color"]):not([type="checkbox"]) {
+  font: inherit;
+  color: var(--ink);
+  background: var(--field);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  min-width: 0;
+  flex: 1;
+}
+dialog.ui input.em {
+  flex: none;
+  width: 68px;
+  text-align: center;
+}
+dialog.ui .sw {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 16px;
+}
+dialog.ui .sw button,
+dialog.ui .sw input {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid var(--card);
+  padding: 0;
+  box-shadow: 0 0 0 1.5px var(--line);
+  background: none;
+}
+dialog.ui .sw button.on {
+  box-shadow: 0 0 0 3px var(--ink);
+}
+dialog.ui .sw.wall button,
+dialog.ui .sw.wall input {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+dialog.ui .sw input.on {
+  box-shadow: 0 0 0 3px var(--ink);
+}
+dialog.ui .apps {
+  display: grid;
+  gap: 2px;
+  margin: 6px 0 14px;
+  max-height: 38vh;
+  overflow: auto;
+}
+dialog.ui .apps label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  font-size: 15px;
+}
+dialog.ui .apps input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--teal);
+  flex: none;
+}
+dialog.ui .ok,
+dialog.ui .no {
+  flex: 1;
+  border-radius: 999px;
+  padding: 11px;
+  font: 700 15px var(--head);
+  margin: 0;
+}
+dialog.ui .ok {
+  background: var(--teal);
+  color: #fff;
+}
+dialog.ui .no {
+  background: var(--gold-soft);
+}
+.top a,
+.top button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: var(--bar-btn);
+  color: var(--bar-ink);
+  border-radius: 999px;
+  height: 34px;
+  min-width: 34px;
+  padding: 0 10px;
+  font: 700 13px var(--head);
+}
+#tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 16px;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--line);
+}
+#tabs::-webkit-scrollbar {
+  display: none;
+}
+.tabw {
+  position: relative;
+}
+.tabw.ml #tabs {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 44px);
+  mask-image: linear-gradient(90deg, transparent 0, #000 44px);
+}
+.tabw.mr #tabs {
+  -webkit-mask-image: linear-gradient(270deg, transparent 0, #000 44px);
+  mask-image: linear-gradient(270deg, transparent 0, #000 44px);
+}
+.tabw.ml.mr #tabs {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 44px, #000 calc(100% - 44px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 44px, #000 calc(100% - 44px), transparent 100%);
+}
+.tabar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  color: var(--sub);
+  font: 700 17px/1 var(--head);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  z-index: 2;
+}
+.tabar.l {
+  left: 4px;
+}
+.tabar.r {
+  right: 4px;
+}
+.tabw.ml .tabar.l,
+.tabw.mr .tabar.r {
+  display: flex;
+}
+.tab {
+  flex: none;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--sub);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font: 700 14px var(--head);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.tab.on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] .tab.on {
+  color: #16302d;
+}
+.tab.soon {
+  border-style: dashed;
+  opacity: 0.75;
+}
+main {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 14px 16px calc(40px + env(safe-area-inset-bottom));
+}
+h2 {
+  font: 700 14px var(--head);
+  letter-spacing: 0.14em;
+  color: var(--teal);
+  margin: 26px 0 10px;
+}
+.box {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.sub {
+  color: var(--sub);
+  font-size: 13.5px;
+}
+.empty {
+  color: var(--sub);
+  font-size: 14px;
+  padding: 8px 0;
+}
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 8;
+  white-space: nowrap;
+}
+#toast.on {
+  opacity: 1;
+}
+#hanko {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9;
+}
+#hanko.on {
+  display: flex;
+}
+#hanko div {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 9px solid var(--acc);
+  color: var(--acc);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font: 800 34px var(--head);
+  animation: pon 0.9s ease-out forwards;
+}
+#hanko span {
+  font-size: 56px;
+  line-height: 1.1;
+}
+@keyframes pon {
+  0% {
+    transform: scale(2.4) rotate(-22deg);
+    opacity: 0;
+  }
+  22% {
+    transform: scale(0.94) rotate(-9deg);
+    opacity: 1;
+  }
+  32% {
+    transform: scale(1) rotate(-9deg);
+  }
+  80% {
+    transform: scale(1) rotate(-9deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-9deg);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hanko div {
+    animation: fade 0.9s forwards;
+  }
+}
+@keyframes fade {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* 入口: 帯なし・時計・背景(写真も) */
+body.home::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--wall, var(--bg));
+}
+header.bare {
+  position: static;
+  background: none;
+}
+header.bare .top {
+  background: none;
+  padding: 10px 12px 0;
+}
+header.bare .gap {
+  flex: 1;
+}
+header.bare .top a,
+header.bare .top button {
+  background: color-mix(in srgb, var(--card) 62%, transparent);
+  color: var(--ink);
+  backdrop-filter: blur(6px);
+}
+.clock {
+  text-align: center;
+  padding: 10px 0 26px;
+  color: var(--ink);
+}
+.clock .tm {
+  font: 800 68px/1.05 var(--head);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.clock .dt {
+  font: 700 17px var(--head);
+  margin-top: 2px;
+}
+body.photo .clock,
+body.photo .app .nm {
+  text-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(0, 0, 0, 0.35);
+}
+body.photo .app.soon .ic {
+  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(0, 0, 0, 0.18) !important;
+  filter: none;
+  opacity: 0.85;
+}
+body.photo header.bare .top a,
+body.photo header.bare .top button {
+  background: rgba(255, 255, 255, 0.72);
+  color: #3a322d;
+}
+dialog.ui .sw.wall button[data-k="photo"] {
+  background-size: cover !important;
+}
+dialog.ui .apps label span {
+  flex: 1;
+}
+dialog.ui .apps label button {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  font-size: 15px;
+}
+/* 入口の並べかえ */
+body.arrange .grid {
+  touch-action: none;
+}
+body.arrange .app {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  cursor: grab;
+  animation: wig 0.5s ease-in-out infinite alternate;
+}
+body.arrange .app:nth-child(2n) {
+  animation-delay: -0.25s;
+}
+body.arrange .app.drag {
+  animation: none;
+  transform: scale(1.12);
+  opacity: 0.8;
+  cursor: grabbing;
+}
+@keyframes wig {
+  from {
+    transform: rotate(-1.6deg);
+  }
+  to {
+    transform: rotate(1.6deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.arrange .app {
+    animation: none;
+    outline: 2px dashed var(--line);
+    outline-offset: 4px;
+    border-radius: 14px;
+  }
+}
+.arr-done {
+  position: fixed;
+  left: 50%;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--teal);
+  color: #fff;
+  border-radius: 999px;
+  padding: 13px 34px;
+  font: 700 17px var(--head);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 7;
+}
+body.arrange #toast {
+  bottom: calc(92px + env(safe-area-inset-bottom));
+}
+/* せってい */
+#tabs button.tab {
+  cursor: pointer;
+}
+.rows {
+  padding: 4px 14px;
+}
+.rowl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15.5px;
+}
+.rowl:last-child {
+  border-bottom: 0;
+}
+.rowl input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--teal);
+  flex: none;
+}
+.rowl .nm {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.rowl .pen {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+}
+.mini {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 22%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+}
+.btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  background: var(--gold-soft);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 12px;
+  font: 700 15px var(--head);
+  margin-top: 14px;
+}
+.pv {
+  height: 190px;
+  border-radius: 20px;
+  border: 1.5px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  background-size: cover;
+  background-position: center;
+}
+.pv .tm {
+  font: 800 44px/1 var(--head);
+}
+.pv .ics {
+  display: flex;
+  gap: 12px;
+}
+.pv.photo .tm {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+.sws {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.sws button,
+.sws input {
+  width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 14px;
+  border: 3px solid var(--card);
+  padding: 0;
+  box-shadow: 0 0 0 1.5px var(--line);
+}
+.sws button[data-k="photo"] {
+  background-size: cover !important;
+  background-position: center !important;
+}
+.sws button.on,
+.sws input.on {
+  box-shadow: 0 0 0 3px var(--ink);
+}
+.seg {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+.seg button {
+  border-radius: 999px;
+  padding: 10px 4px;
+  font: 700 13.5px var(--head);
+  color: var(--sub);
+}
+.seg button.on {
+  background: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] .seg button.on {
+  color: #16302d;
+}
+
+/* 🌙 おやすみモード: 暗い色にしたうえで、画面ぜんたいをもう一段しずめる */
+html[data-rest]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #0b0a14;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 2147483000;
+}
+#moon.on {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.restline {
+  display: block;
+  margin: -14px auto 18px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font: 700 13.5px var(--head);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--card) 62%, transparent);
+  backdrop-filter: blur(6px);
+}
+.restline[hidden] {
+  display: none;
+}
+.rowl.hours select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--field);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+dialog.ui .offs .btn {
+  margin-top: 10px;
+}
+dialog.ui .offs .btn:disabled {
+  opacity: 0.6;
+}
+
+/* ページそのものは動かさず、中身(main)だけを動かす。Android の Chrome は、ページが下に動くと上の住所欄を隠して全画面のようになるので、それを起こさない */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+header {
+  flex: none;
+}
+main {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  max-width: none;
+  margin: 0;
+  padding-left: max(16px, calc(50% - 264px));
+  padding-right: max(16px, calc(50% - 264px));
+}
+
+/* ぷるん: 押すと少しつぶれて、はなすと ぷるんと戻る(common.js が .pr / .puru を付ける。せってい → 見た目 で切れる)。scale を使うので、位置合わせの transform とぶつからない */
+html[data-puru] .pr {
+  scale: 0.92;
+  transition: scale 0.09s ease-out;
+}
+html[data-puru] .puru {
+  animation: puru 0.52s ease-out;
+}
+@keyframes puru {
+  0% {
+    scale: 0.92;
+  }
+  28% {
+    scale: 1.1 0.9;
+  }
+  48% {
+    scale: 0.95 1.07;
+  }
+  68% {
+    scale: 1.04 0.97;
+  }
+  84% {
+    scale: 0.99 1.01;
+  }
+  100% {
+    scale: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-puru] .pr {
+    scale: 1;
+  }
+  html[data-puru] .puru {
+    animation: none;
+  }
+}
+
+/* ぷるん(見た目): アプリの四角を、ゼリーやグミのような ぷるんとした粒にする。角をまるく、中がほんのり透けて、上に小さな光の粒、下に色のついた影(せってい → 見た目 で切れる) */
+html[data-tsuya] .app .ic,
+html[data-tsuya] .mini {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 32%;
+  box-shadow:
+    0 4px 8px -4px color-mix(in srgb, var(--c, #3a322d) 55%, transparent),
+    0 1px 3px rgba(58, 50, 45, 0.12),
+    inset 0 3px 6px rgba(255, 255, 255, 0.2),
+    inset 0 -4px 7px rgba(0, 0, 0, 0.11),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+html[data-tsuya] .app .ic::before,
+html[data-tsuya] .mini::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(32% 14% at 33% 15%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2) 60%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(6% 4% at 69% 14%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(80% 36% at 50% 108%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(90% 90% at 50% 45%, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.05) 100%);
+}
+html[data-tsuya] .app .ic {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+html[data-tsuya] .app.soon .ic {
+  box-shadow: none;
+}
+html[data-tsuya] .app.soon .ic::before {
+  display: none;
+}
+html[data-tsuya][data-theme="dark"] .app .ic::before,
+html[data-tsuya][data-theme="dark"] .mini::before {
+  opacity: 0.75;
+}
+
+/* せってい → 見た目: 字のフォントを選ぶ四角 */
+.fonts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.fonts button {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 6px;
+  font-size: 17px;
+  line-height: 1.3;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fonts button small {
+  display: block;
+  font: 11px var(--maru);
+  color: var(--sub);
+}
+.fonts button.on {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 2px var(--teal);
+}
+/* 入口の時計(と日付)だけ、長押ししても 選択・コピーの吹き出しを出さない。ほかの字は 持ち主・もう ひとり の版とも コピペできる */
+#clock,
+#clock * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* 決まりの部品(G.gear・G.slide)。.claude/skills/gojiai-app/SKILL.md */
+.top a.gear {
+  font-size: 18px;
+  padding: 0;
+}
+.top a.gear.on {
+  box-shadow: 0 0 0 2px var(--bar-ink);
+}
+.dragging {
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  transition: none !important;
+}
+.grip {
+  margin-left: auto;
+  color: var(--mute);
+  font-size: 18px;
+  padding: 0 4px;
+  flex: none;
+} /* 長押しで つまめる行の しるし */
+label.rowl[data-k] {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.top a.new {
+  background: rgba(255, 255, 255, 0.55);
+} /* 💡 ようぼう・ベータ に新しいのがある */
+header.bare .top a.new,
+body.photo header.bare .top a.new {
+  background: var(--card);
+} /* 透けを なくして こく */
+/* 並べかえのとき 入口の あいているところに出る ＋ の四角(common.js の addApp) */
+.app.addt {
+  background: none;
+  border: 0;
+  animation: none;
+}
+.app.addt .ic {
+  background: transparent !important;
+  border: 2.5px dashed var(--sub);
+  color: var(--sub);
+  font: 400 34px/1 var(--head);
+  box-shadow: none;
+}
+.app.addt .ic::before,
+.app.addt .ic::after {
+  display: none;
+}
+dialog.ui .apps .pick {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--line);
+  font: 700 16px var(--head);
+  color: var(--ink);
+}
+dialog.ui .apps .sub {
+  margin: 8px 0 2px;
+  font-size: 12.5px;
+}
+.clock .dt .alarm {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1.4;
+  vertical-align: 1px;
+} /* 字の高さに収める(時計の字に かからない) */
+.clock .dt .alarm.late {
+  background: var(--gold-soft);
+  box-shadow: 0 0 0 1.5px var(--gold);
+  animation: alarmPulse 2.4s ease-in-out infinite;
+} /* 23 時から: あしたの アラーム かけた? */
+@keyframes alarmPulse {
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 35%, transparent);
+  }
+}
+dialog.ui .apps input {
+  font: 600 16px var(--maru);
+  color: var(--ink);
+  background: var(--field);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 11px !important;
+  min-height: 44px;
+  min-width: 0;
+  margin: 6px 0;
+}
+dialog.ui .apps .r input:not(.em) {
+  flex: 1;
+}
+dialog.ui .apps input.em {
+  width: 64px;
+  text-align: center;
+  flex: none;
+}
+dialog.ui .apps .ok {
+  width: 100%;
+  margin-top: 6px;
+}
+.clock .dt button.alarm {
+  background: none;
+  color: inherit;
+  height: auto;
+  min-width: 0;
+  font: inherit;
+  font-size: 15px;
+}
+.clock .dt .alarm.done {
+  opacity: 0.35;
+} /* その夜 押したら うすく */
+/* 🕰️ ひらいた記録(⚙️ 🧩 アプリ) */
+.chips2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+.chips2 button {
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: 700 13px var(--head);
+  background: var(--card);
+  color: var(--ink);
+}
+.chips2 button.on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+.rowl.opr .nm {
+  min-width: 0;
+}
+.rowl .opn {
+  display: block;
+  color: var(--sub);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.rowl .fsel {
+  flex: none;
+  max-width: 34%;
+  font: 700 13px var(--head);
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 4px;
+}
+.app {
+  transition: opacity 0.4s;
+}
+
+/* ⚙️ の「つなぎ方」: <details class="how"> の 中に 手順(ol)と 写す 箱(.cp)。写す ボタンは common.js の G.how() が 付ける */
+.how {
+  margin-top: 22px;
+  border-top: 1.5px solid var(--line);
+}
+.how summary {
+  font: 700 17px var(--head);
+  padding: 12px 0;
+  cursor: pointer;
+  color: var(--teal);
+}
+.how summary small {
+  font-size: 13px;
+  color: var(--sub);
+  font-weight: 400;
+}
+.how h3 {
+  margin: 16px 0 4px;
+  font: 700 15px var(--head);
+}
+.how ol,
+.how ul {
+  margin: 4px 0 0;
+  padding-left: 1.3em;
+  line-height: 1.8;
+}
+.how li {
+  margin: 2px 0;
+  overflow-wrap: anywhere;
+}
+.how code {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.how .pc {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--gold-soft);
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.cp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 6px 6px 6px 10px;
+}
+.cp code {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  user-select: all;
+  -webkit-user-select: all;
+}
+.cp button {
+  flex: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: var(--teal);
+  color: #fff;
+  font: 700 14px var(--head);
+}
+:root[data-theme="dark"] .cp button {
+  color: #16302d;
+}
+.cp code.hid {
+  color: var(--mute);
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: inherit;
+}
+.cp button.eye {
+  background: var(--gold-soft);
+  color: var(--ink);
+  padding: 8px 12px;
+}
+:root[data-theme="dark"] .cp button.eye {
+  color: var(--ink);
+}
+/* つなぎ方 の 枠(.box.lk): 見出しの 横に ✓ 連携ずみ / まだ(.st)、入力(input)、つなぐ(.go)、小さい ボタン(.soft)。おうち・おかね・からだ・メッセージ・ひといき で 同じ 見た目 */
+.box.lk {
+  margin-top: 12px;
+  padding: 14px;
+}
+.box.lk h3 {
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.box.lk .st {
+  font: 700 12.5px var(--head);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--sub);
+}
+.box.lk .st.ok {
+  background: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] .box.lk .st.ok {
+  color: #16302d;
+}
+.box.lk input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0 0;
+  padding: 11px 12px;
+  font-size: 16px;
+}
+.box.lk input {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.box.lk .go {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10px 0 4px;
+  padding: 12px;
+  border-radius: 999px;
+  text-align: center;
+  text-decoration: none;
+}
+.box.lk .go {
+  background: var(--teal);
+  color: #fff;
+  font: 700 15px var(--head);
+}
+:root[data-theme="dark"] .box.lk .go {
+  color: #16302d;
+}
+.box.lk .go.alt,
+:root[data-theme="dark"] .box.lk .go.alt {
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+.box.lk .go:disabled,
+.lk .go.off {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.box.lk .soft {
+  margin: 8px 8px 0 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--ink);
+  font: 700 13.5px var(--head);
+}
+.box.lk a:not(.go) {
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.box.lk .sub {
+  margin-top: 8px;
+}
+.box.lk .apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 2px;
+}
+.box.lk .apps span {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  font: 700 13px var(--head);
+}
+/* ⚙️ せってい の 🔗 れんけい: 1 行 = れんけい先(太字)+ しるし、利用アプリ、れんけい情報、設定へ */
+.lkrow {
+  margin-top: 10px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  align-items: center;
+}
+.lkrow .hd {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font: 700 16px var(--head);
+  min-width: 0;
+}
+.lkrow .hd b {
+  overflow-wrap: anywhere;
+}
+.lkrow .st {
+  font: 700 12px var(--head);
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--sub);
+  white-space: nowrap;
+}
+.lkrow .st.ok {
+  background: var(--teal);
+  color: #fff;
+}
+:root[data-theme="dark"] .lkrow .st.ok {
+  color: #16302d;
+}
+.lkrow .use,
+.lkrow .info {
+  grid-column: 1;
+  color: var(--sub);
+  font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+.lkrow .go {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--ink);
+  font: 700 13.5px var(--head);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lkhd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px 0 2px;
+}
+.lkhd .q {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  color: var(--sub);
+  font: 700 14px var(--head);
+}
+.lkhd .srt {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: 700 13.5px var(--head);
+}
+/* まだ つないで いない とき の 案内(G.needLink) */
+.needlink {
+  text-align: center;
+  padding: 26px 14px;
+  margin-top: 10px;
+}
+.needlink .e {
+  font-size: 46px;
+  line-height: 1.2;
+}
+.needlink .t {
+  font: 700 17px var(--head);
+  margin-top: 6px;
+}
+.needlink .sub {
+  margin-top: 6px;
+}
+.needlink .go {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #fff;
+  font: 700 15px var(--head);
+  text-decoration: none;
+}
+:root[data-theme="dark"] .needlink .go {
+  color: #16302d;
+}
+.needlink .sub,
+.needlink .t {
+  text-wrap: balance;
+}
+/* ⚙️ せってい の 👪 かぞく */
+.pprow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px 14px;
+}
+.pprow .nm {
+  flex: 1;
+  font: 700 15px var(--head);
+}
+.ppone {
+  margin-top: 10px;
+  padding: 12px 14px;
+}
+.ppone .pplab {
+  font: 700 13px var(--head);
+  color: var(--sub);
+}
+.ppone input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 10px;
+  padding: 10px 12px;
+  font-size: 16px;
+}
+.ppone input {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.ppsw {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ppsw button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+}
+.ppsw button.on {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--card) inset;
+}
+h2 .q {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  color: var(--sub);
+  font: 700 13px var(--head);
+  vertical-align: 2px;
+}
+/* ひとりで 使う(body.solo): 「だれの」を えらぶ・見せる 部品を しまう */
+body.solo .who,
+body.solo #whose,
+body.solo .wh,
+body.solo #lg {
+  display: none !important;
+}
+.ppsw button:disabled {
+  opacity: 0.25;
+}
+.rowl .grip {
+  flex: none;
+  color: var(--mute);
+  font-size: 18px;
+  padding: 0 2px 0 6px;
+  touch-action: none;
+}
+.rowl.dragging {
+  background: var(--card);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  position: relative;
+  z-index: 2;
+  border-radius: 10px;
+}
+/* ⚙️ の 🕰️ ひらいた記録: 1 つの 枠(.fadeall)の 中に、うすく する 時間・おすすめ・アプリごと */
+.fadeall {
+  margin-top: 10px;
+  padding: 4px 14px 6px;
+}
+.fadeall > .rows {
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+.fadeall > .rows + .btn,
+.fadeall > .btn + .rows {
+  margin-top: 4px;
+}
+.fadeall > .btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+}
+.fadeall > .rows:last-child {
+  border-top: 1px solid var(--line);
+  padding-top: 4px;
+}
+/* ⚙️ の ℹ️ このアプリ: ほかの タブと 同じ 左寄せ。ボタンは 幅いっぱい */
+section > .btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+section > .bk {
+  margin-top: 6px;
+}
+.seg2 button.off {
+  opacity: 0.4;
+}
+/* 🕰️ ひらいた記録: うすく する 時間 と「おすすめに する」の あいだに 線 */
+.fadeall > .rows:first-child {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+.fadeall > .btn {
+  margin: 14px 0;
+}
+/* ⚙️ の ℹ️ このアプリ: 見出しは 枠の 外、中身は 枠の 中 */
+.lite-sec {
+  margin-top: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.lite-sec .sub,
+.lite-sec > .btn {
+  margin: 0;
+}
+/* 🕰️ ひらいた記録: おすすめに する は 上と 下の 線の まん中 */
+.fadeall > .rows + .btn {
+  margin: 14px 0;
+}
+.fadeall > .btn + .rows {
+  margin-top: 0;
+  padding-top: 4px;
+}
+/* 🕰️ ひらいた記録: 枠の 上の 余白(いちばん 上の 文が 枠に くっつかない ように) */
+.fadeall {
+  padding-top: 12px;
+}
+.fadeall > .rows:first-child .nm {
+  margin-bottom: 8px;
+}
+/* ⚙️ せってい: タブの すぐ 下の 見出しを 上に つめる(1 ページに 収まる ように。) */
+#root > section > h2:first-child {
+  margin-top: 8px;
+}

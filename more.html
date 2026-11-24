@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>正式アプリ版 — ぬくまど</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="lite/lite.css">
+<style>
+/* 体験版の「正式アプリ版」: 上の 帯に ‹ せってい へ、その 下は 画面の 写真を 横に めくる だけ。縦には スクロール しない */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.top {
+  flex: none;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  background: #d97a93;
+  color: #fff;
+}
+.top .back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-decoration: none;
+}
+.top h1 small {
+  margin-left: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font: 700 12px var(--head);
+  vertical-align: 2px;
+}
+/* スマホは 1 台 だけ 固定。中の 画面を 横に めくると 画面と 説明が 変わる */
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 6px 0;
+}
+.stage .pic {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: size; /* スマホの 枠を、空いて いる 高さと 幅の 小さい ほうに 合わせる */
+}
+/* スマホっぽい 枠(色は 上の 帯と 同じ ピンク。)。縦横の 比は 画面の まま、少し 小さめ */
+.phone {
+  position: relative;
+  width: min(78cqw, 44cqh);
+  height: min(88cqh, 156cqw);
+  padding: 10px 7px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  background: #d97a93;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 34%;
+  height: 4px;
+  border-radius: 99px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.45);
+}
+/* さいごの 画面: ほしいと 思ったら フォームへ */
+.screens .end {
+  flex: none;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 18px;
+  box-sizing: border-box;
+  background: var(--bg);
+  text-align: center;
+}
+.screens .end .e {
+  font-size: 44px;
+  line-height: 1;
+}
+.screens .end p {
+  margin: 0;
+  line-height: 1.8;
+  font-size: 14px;
+  word-break: auto-phrase;
+}
+.screens .end a {
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: #d97a93;
+  color: #fff;
+  font: 700 14px var(--head);
+  text-decoration: none;
+}
+.nav {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  color: var(--sub);
+  font: 700 20px/1 var(--head);
+}
+.nav:disabled {
+  opacity: 0.3;
+}
+.screens {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  border-radius: 22px;
+  scrollbar-width: none;
+}
+.screens::-webkit-scrollbar {
+  display: none;
+}
+.screens img {
+  flex: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  scroll-snap-align: center;
+}
+/* じーっとさん(ハシビロコウ。ためし中の しるし)。説明の 右上に ずっと 立つ */
+.jt {
+  position: absolute;
+  right: max(18px, env(safe-area-inset-right, 0px));
+  bottom: 194px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+}
+.jt img {
+  width: 72px;
+  height: auto;
+  animation: jt 9s ease-in-out infinite;
+  transform-origin: 50% 95%;
+}
+.jt .say {
+  max-width: 150px;
+  margin-bottom: 44px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  font-size: 12px;
+  line-height: 1.5;
+  word-break: auto-phrase;
+}
+@keyframes jt {
+  0%,
+  86%,
+  100% {
+    transform: none;
+  }
+  90% {
+    transform: rotate(-3deg);
+  }
+  94% {
+    transform: rotate(2deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jt img {
+    animation: none;
+  }
+}
+.cap {
+  flex: none;
+  height: 146px; /* 行の 数が ちがっても 同じ 高さ */
+  overflow: hidden;
+  margin: 12px max(16px, env(safe-area-inset-left, 0px)) 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  background: var(--card); /* 説明は 白い 枠の 中 */
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+}
+.cap h3 {
+  margin: 4px 0 0;
+  word-break: auto-phrase;
+  font: 700 17px var(--head);
+}
+.cap p {
+  margin: 0;
+  word-break: auto-phrase; /* 文節で 改行(分かち書きを しない 文) */
+  text-wrap: pretty;
+  line-height: 1.6;
+  font-size: 14px;
+}
+.with {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.with span {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--ink);
+  font: 700 12px var(--head);
+}
+.dots {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--line);
+}
+.dots button.on {
+  background: var(--teal);
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <a class="back" href="settei.html#about" aria-label="せっていへ もどる">‹</a>
+  <h1>📱 正式アプリ版<small>公開予定</small></h1>
+ </div>
+</header>
+<div class="stage">
+ <button class="nav prev" id="prev" type="button" aria-label="まえの 画面">‹</button>
+ <div class="pic"><div class="phone"><div class="screens" id="slides">
+  <img src="lite/more/home.jpg" alt="☀️ 入口の画面" width="390" height="780">
+  <img src="lite/more/kyou.jpg" alt="📅 きょうの画面" width="390" height="780">
+  <img src="lite/more/karada.jpg" alt="🫧 からだの画面" width="390" height="780">
+  <img src="lite/more/nemuri.jpg" alt="😴 ねむりの画面" width="390" height="780">
+  <img src="lite/more/message.jpg" alt="💌 メッセージの画面" width="390" height="780">
+  <img src="lite/more/ouchi.jpg" alt="🏠 いえりもの画面" width="390" height="780">
+  <img src="lite/more/tana.jpg" alt="📚 すきなものの棚の画面" width="390" height="780">
+  <img src="lite/more/koe.jpg" alt="🎙️ 読み上げの画面" width="390" height="780">
+  <img src="lite/more/board.jpg" alt="📝 ホワイトボードの画面" width="390" height="780">
+  <img src="lite/more/yarukoto.jpg" alt="✅ やることの画面" width="390" height="780">
+  <img src="lite/more/links.jpg" alt="🔗 れんけいの画面" width="390" height="780">
+ <div class="end"><div class="e">💌</div><p>「これがほしい」「こうなったら使いたい」を教えてください。</p><a id="formgo" href="settei.html#about" target="_blank" rel="noopener">📮 Google フォームで 伝える</a></div>
+ </div></div></div>
+ <button class="nav next" id="next" type="button" aria-label="つぎの 画面">›</button>
+</div>
+<div class="jt"><div class="say">まだ 作って いる ところ です。じーっと 見て います。</div><img src="jiitto.svg" alt="じーっとさん(ハシビロコウ)" width="72" height="72"></div>
+<div class="cap">
+ <h3 id="ct"></h3>
+ <p id="cd"></p>
+ <div class="with" id="cw"></div>
+</div>
+<div class="dots" id="dots"></div>
+<script src="lite/defaults.js"></script>
+<script src="lite/api.js"></script>
+<script src="common.js"></script>
+<script src="lite/after.js"></script>
+<script>
+/* 画面と 説明(img の 並びと 同じ 順)。めくると 説明・点・‹ › が 変わる */
+const CAP = [
+  {"t": "☀️ 入口", "d": "天気・きょうの予定・やることを、時計の下にひと目で。", "w": ["天気", "カレンダー"]},
+  {"t": "📅 きょう", "d": "きょうの予定を大きく、あしたを小さく。日・週・月で見られます。", "w": ["Google カレンダー"]},
+  {"t": "🫧 からだ", "d": "ねむり・歩数・心拍・体温を、打ちこまずにまとめて。", "w": ["Health Connect", "Garmin"]},
+  {"t": "😴 ねむり", "d": "これまでの夜を帯で。寝た時間がひと目でわかります。", "w": ["Health Connect", "Garmin"]},
+  {"t": "💌 メッセージ", "d": "スマホの通知から、返事が要りそうなものだけを上に。", "w": ["LINE", "Slack", "Gmail"]},
+  {"t": "🏠 いえりも", "d": "電気・カーテン・エアコン・テレビを、いる部屋から順に。", "w": ["SwitchBot", "テレビ"]},
+  {"t": "📚 すきなものの棚", "d": "本・音楽・動画・ことばを棚に。きぶんに合うものが「いま」に出ます。", "w": ["ひといき"]},
+  {"t": "🎙️ 読み上げ", "d": "タイマーのことばを、えらんだ声で読み上げます。", "w": ["VOICEVOX", "ElevenLabs"]},
+  {"t": "📝 ホワイトボード", "d": "冷蔵庫に貼るボードの代わり。家の人とふたりで1枚。", "w": ["ふたりで使える"]},
+  {"t": "✅ やること", "d": "いつかやることを、責めずに置いておけます。", "w": ["ふたりで使える"]},
+  {"t": "🔗 れんけい", "d": "どことつながっているかを、1枚で。", "w": ["一覧で見られる"]},
+  {"t": "💬 ほしいと思ったら", "d": "出すかどうか、いつになるかは、まだ決まっていません。声が集まると、作る順番の手がかりになります。", "w": []}
+];
+const box = G.$("slides"),
+  dots = G.$("dots"),
+  ss = [...box.querySelectorAll("img, .end")];
+let cur = -1;
+const go = i => box.scrollTo({left: ((i + ss.length) % ss.length) * box.clientWidth, behavior: "smooth"}); /* はじめと さいごは つながる */
+for (const [i] of ss.entries()) {
+  const b = G.el("button");
+  b.type = "button";
+  b.setAttribute("aria-label", `${i + 1} 枚め`);
+  b.onclick = () => go(i);
+  dots.append(b);
+}
+const mark = () => {
+  const k = Math.round(box.scrollLeft / Math.max(1, box.clientWidth));
+  if (k === cur) return;
+  cur = k;
+  const c = CAP[k] || CAP[0];
+  G.$("ct").textContent = c.t;
+  G.$("cd").textContent = c.d;
+  const w = G.$("cw");
+  w.textContent = "";
+  for (const x of c.w) w.append(G.el("span", null, x));
+  [...dots.children].forEach((d, i) => d.classList.toggle("on", i === k));
+};
+G.$("prev").onclick = () => go(cur - 1);
+G.$("next").onclick = () => go(cur + 1);
+box.addEventListener("scroll", () => requestAnimationFrame(mark), {passive: true});
+addEventListener("resize", () => go(cur));
+mark();
+/* フォームへ:「こうして ほしい」「その他(正式アプリ版)」を 入れて 開く(フォームが まだ 無ければ ⚙️ の 窓口へ) */
+{
+  const N = window.NUKUMADO || {},
+    a = G.$("formgo");
+  if (N.form && N.formIds) {
+    const q = new URLSearchParams({usp: "pp_url", [N.formIds.kind]: (N.formOpts || {})["こうして ほしい"] || "こうしてほしい", [N.formIds.app]: "__other_option__"});
+    q.set(N.formIds.app + ".other_option_response", "正式アプリ版");
+    q.set(N.formIds.env, `ぬくまど 体験版 ${N.ver || ""} / 正式アプリ版の ページから`);
+    a.href = N.form + "?" + q;
+  } else a.removeAttribute("target");
+}
+</script>
+</body>
+</html>
